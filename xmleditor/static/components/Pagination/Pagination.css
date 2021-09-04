@@ -1,0 +1,22 @@
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.pagination-container .page-btn {
+    padding: 8px 16px;
+    color: black;
+    user-select: none;
+}
+
+.pagination-container .page-btn:hover:not(.selected) {
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+.pagination-container .page-btn.selected {
+    background-color: #0d6efd;
+    color: white;
+    user-select: none;
+}

@@ -1,0 +1,38 @@
+{
+  "name": "xmlfiles",
+  "version": "1.0.0",
+  "description": "Django + React XML editor app",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "lint": "./node_modules/.bin/eslint 'xmleditor/static/**' --ext .js,.jsx --fix",
+    "init-setup": "pip install django && npm install",
+    "start": "npm run build && python manage.py runserver"
+  },
+  "author": "nkovrchk",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/preset-react": "^7.13.13",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.4",
+    "eslint": "^7.26.0",
+    "eslint-plugin-react": "^7.23.2",
+    "mini-css-extract-plugin": "^1.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.7.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.0",
+    "bootstrap-icons": "^1.4.1",
+    "lodash": "^4.17.21"
+  },
+  "repository": {
+    "url": "https://gitlab.com/nkovrchk/xml-editor"
+  }
+}

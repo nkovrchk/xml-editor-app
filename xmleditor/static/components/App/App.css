@@ -1,0 +1,30 @@
+.message-container {
+    padding: 0.5rem 2rem;
+    justify-content: center;
+}
+
+.message-container.shown {
+    display: flex;
+}
+
+.message-container.hidden {
+    display: none;
+}
+
+.message {
+    padding: 0.125rem 1.25rem;
+    border-radius: 0.75rem;
+    color: white;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 0.875rem;
+    min-width: 75%;
+}
+
+.message.Success {
+    background-color: #198754;
+}
+
+.message.Error {
+    background-color: #dc3545;
+}

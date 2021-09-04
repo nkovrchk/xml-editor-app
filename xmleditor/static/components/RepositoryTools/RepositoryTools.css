@@ -1,0 +1,69 @@
+.tools-container {
+    margin-top: 1.5rem;
+    padding: 0.75rem 0;
+    border: 1px #cacaca solid;
+    background-color: #fafafa;
+    border-radius: 0.25rem;
+}
+
+.tools-container .tools-setting-container .tools-setting-title {
+    font-size: 1.25rem;
+}
+
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row {
+    display: flex;
+    padding: 0.5rem 0;
+}
+
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input {
+    margin-left: 0.75rem;
+}
+
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input:nth-of-type(1) {
+    margin-left: 0;
+}
+
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input label {
+    font-size: 0.75rem;
+    margin-left: 0.25rem;
+}
+
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input input {
+    outline: none;
+}
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input label {
+    user-select: none;
+}
+
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input input[type=radio]:hover,
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input input[type=checkbox]:hover {
+    cursor: pointer;
+}
+
+.tools-container .tools-setting-container .tools-setting-body .tools-ctrl-row .ctrl-input input[type=text] {
+    border: 1px solid #cacaca;
+    font-size: 0.75rem;
+    padding: 0.125rem 0.25rem;
+    outline: none;
+    width: 100%;
+}
+
+.tools-container .tools-ctrl-btns {
+    margin-top: 1.25rem;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.tools-container .tools-ctrl-btns .tools-btn {
+    margin-right: 1.25rem
+}
+
+.tools-container .tools-ctrl-btns .tools-btn:nth-of-type(1) {
+    margin-right: 0;
+}
+
+.tools-container .tools-ctrl-btns .tools-btn button {
+    outline: none;
+    user-select: none;
+}
+
