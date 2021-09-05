@@ -1,42 +1,38 @@
 const path = require('path');
-const nodeExternals = require('webpack-node-externals');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
-const staticDir = path.resolve(__dirname, 'xmleditor/static');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
-	entry: {
-		index: [
-			path.resolve(staticDir, 'js/index.js'),
-			path.resolve(staticDir, 'css/index.css'),
-		]
-	},
-	target: 'node',
-	externals: [nodeExternals()],
+	entry: path.resolve('src', 'index.tsx'),
 	resolve: {
-		extensions: ['.js', '.jsx'],
+		extensions: ['.js', '.jsx', '.tsx', '.ts', '.json'],
+		modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src')],
 	},
 	output: {
 		path: path.resolve(__dirname, 'dist'),
-		filename: '[name].js',
+		filename: 'index.js'
 	},
 	module: {
 		rules: [
 			{
-				test: /\.(js|jsx)$/,
+				test: /\.[jt]sx?$/,
 				exclude: /node_modules/,
 				use: ['babel-loader']
 			},
 			{
 				test: /\.css$/i,
-				use: [MiniCssExtractPlugin.loader, 'css-loader'],
+				use: ['style-loader', 'css-loader'],
 			},
+			{
+				test: /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani|ico)$/,
+				use: ['url-loader'],
+			},
+			{
+				test: /.svg$/,
+				use: ['@svgr/webpack', 'url-loader'],
+			}
 		],
 	},
-	plugins: [
-		new MiniCssExtractPlugin({
-			filename: '[name].css',
-		}),
-	],
+	//externals: ['react', 'react-dom', 'styled-components'],
+	//plugins: [new HtmlWebpackPlugin({template: 'src/index.html'})]
 };

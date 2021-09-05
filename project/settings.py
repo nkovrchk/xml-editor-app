@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'xmleditor'
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -111,7 +111,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     ('dist', os.path.join(BASE_DIR, 'dist')),
     ('node_modules', os.path.join(BASE_DIR, 'node_modules')),
-    ('icons', '/xmleditor/static/icons')
+    ('icons', '/app/static/icons')
 ]
 
 # Default primary key field type
