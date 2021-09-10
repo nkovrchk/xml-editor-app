@@ -1,18 +1,31 @@
-import { EArticleType } from './actions';
+import { IArticle } from 'types';
 
-export interface IArticle {
-    title: string;
+export enum EArticleActionType {
+	SET_ARTICLES = 'SET_ARTICLES',
+    DELETE_ARTICLE = 'DELETE_ARTICLE',
+    SET_IS_PENDING = 'SET_IS_PENDING',
 }
 
 export interface IArticleState {
-    articles: IArticle[];
+    files: IArticle[];
+    isPending: boolean;
+    limit: number;
+    offset: number;
 }
 
-export interface IArticleAction {
-    type: EArticleType;
-    payload: string;
+export interface ISetArticlesAction {
+    type: EArticleActionType.SET_ARTICLES;
+    payload: IArticle[];
 }
 
-export interface IArticleReducer {
-    (state: IArticleState, action: IArticleAction): IArticleState;
+export interface IDeleteArticleAction {
+    type: EArticleActionType.DELETE_ARTICLE;
+    payload: IArticle;
 }
+
+export interface ISetIsPendingAction {
+    type: EArticleActionType.SET_IS_PENDING;
+    payload: boolean;
+}
+
+export type TArticleAction = ISetArticlesAction | IDeleteArticleAction | ISetIsPendingAction;

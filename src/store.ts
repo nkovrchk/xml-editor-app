@@ -1,9 +1,9 @@
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { reducer } from 'reducers';
-import { IArticleState } from 'reducers/article/types';
+import thunk from 'redux-thunk';
 
-export const store = createStore(reducer);
+export const store = createStore(reducer, applyMiddleware(thunk));
 
-export interface IRootState {
-    article: IArticleState;
-}
+export type TAppState = ReturnType<typeof store.getState>;
+
+export type TAppDispatch = typeof store.dispatch;

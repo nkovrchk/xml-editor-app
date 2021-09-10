@@ -1,23 +1,29 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Text } from 'components/Text';
 import { useDispatch, useSelector } from 'react-redux';
-import { IArticleAction } from 'reducers/article/types';
-import { Dispatch } from 'redux';
-import { EArticleType } from 'reducers/article/actions';
-import { IRootState } from 'store';
+import { TAppState } from 'store';
+import { getArticles } from 'reducers/article/actions';
+import { Card } from 'components/Card';
 
 export const MyArticles = () => {
-	const dispatch: Dispatch<IArticleAction> = useDispatch();
-	const selector = useSelector((state: IRootState) => state.article);
+	const dispatch = useDispatch();
+	const articleStore = useSelector((state: TAppState) => state.articleStore);
 
-	const callback = useCallback(() => dispatch({ type: EArticleType.ADD, payload: 'title' }), [dispatch]);
+	useEffect(() => {
+		dispatch(getArticles());
+	}, [dispatch]);
+
+	const cards = useMemo(() => {
+		return articleStore.files.length > 0 ? articleStore.files.map(({ title, category , id }) => (
+			<Card title={title} category={category} key={id}/>
+		)) : null;
+	}, [articleStore.files]);
 
 	return (
 		<div>
 			<Text>{'Какой-то текст'}</Text>
 			<Text color='blue'>{'Второй текст'}</Text>
-			<Text>{selector.articles.length}</Text>
-			<button onClick={callback}>{'Добавить'}</button>
+			<div>{cards}</div>
 		</div>
 	);
 };

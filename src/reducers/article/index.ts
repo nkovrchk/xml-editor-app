@@ -1,15 +1,20 @@
-import { IArticleAction, IArticleReducer, IArticleState } from './types';
-import { EArticleType } from './actions';
+import { EArticleActionType, IArticleState, TArticleAction } from './types';
 
 const defaultState: IArticleState = {
-	articles: [],
+	files: [],
+	isPending: true,
+	limit: 20,
+	offset: 0,
 };
 
-export const articleReducer: IArticleReducer = (state: IArticleState = defaultState, action: IArticleAction) => {
+export const articleReducer = (state: IArticleState = defaultState, action: TArticleAction): IArticleState => {
 	switch (action.type){
-	case EArticleType.ADD:
-		state = { ...state, articles: [...state.articles, { title: action.payload }] };
-		return state;
+	case EArticleActionType.SET_ARTICLES:
+		return { ...state, files: [...action.payload] };
+	case EArticleActionType.DELETE_ARTICLE:
+		return { ...state };
+	case EArticleActionType.SET_IS_PENDING:
+		return { ...state, isPending: action.payload };
 	default:
 		return state;
 	}

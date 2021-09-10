@@ -44,28 +44,8 @@ def index(request):
 
     return render(request, 'xmleditor/index.html', {})
 
-
-def getFiles(request):
-    params = request.GET
-
-    search_by = params['search_by']
-    search = params['search']
-    page = params['page']
-    limit = params['limit']
-    sort_by = params['sort_by']
-    sort_val = params['sort_val']
-    match_case = params['match_case']
-    full_match = params['full_match']
-
+def getAllArticles(request):
     files = []
-    response = {
-        'total': 0,
-        'page': 1,
-        'limit': 0,
-        'records': [],
-        'all': [],
-    }
-
     source = []
 
     for (_, _, filenames) in os.walk(repository):
@@ -75,10 +55,77 @@ def getFiles(request):
     for file in files:
         baseName = os.path.splitext(file)
         if baseName[1] == '.xml':
-            source.append(baseName[0])
+            source.append(readFileData(baseName[0]))
 
-    response['all'] = source
+    return HttpResponse(json.dumps(source), content_type='application/json')
 
+
+def getFiles(request):
+    params = request.GET
+
+    print(params)
+
+
+    '''
+        functional filters and non-functional (limit, offset)
+        response example:
+        {
+            limit: 5,
+            offset: 10,
+            size: 5,
+            results: [...],
+            links: {
+                current: "localhost:8080/api/files?limit=5&offset=10",
+                prev:  "localhost:8080/api/files?limit=5&offset=5",
+                next:  "localhost:8080/api/files?limit=5&offset=15",
+            }
+        }
+    '''
+
+    limit = int(params['limit']) if params['limit'] is not None else None
+    offset = int(params['offset']) if params['offset'] is not None else None
+
+    '''
+    search_by = params['search_by']
+    search = params['search']
+    page = params['page']
+    sort_by = params['sort_by']
+    sort_val = params['sort_val']
+    match_case = params['match_case']
+    full_match = params['full_match']
+    
+    response = {
+        'total': 0,
+        'page': 1,
+        'limit': 0,
+        'records': [],
+        'all': [],
+    }
+    '''
+
+    files = []
+    source = []
+
+    for (_, _, filenames) in os.walk(repository):
+        files.extend(filenames)
+        break
+
+    for file in files:
+        baseName = os.path.splitext(file)
+        if baseName[1] == '.xml':
+            source.append(readFileData(baseName[0]))
+
+    if limit is not None and offset is not None:
+        source = source[offset:offset + limit]
+
+    response = {
+        'offset': offset,
+        'limit': limit,
+        'size': len(source),
+        'results': source,
+    }
+
+    '''
     fileDetails = []
 
     for f in source:
@@ -94,7 +141,7 @@ def getFiles(request):
         data['name'] = f
 
         fileDetails.append(data)
-
+    
     if len(search) > 0:
         if full_match == 'true' and match_case == 'false':
             pattern = re.compile(f'^{search}$')
@@ -138,10 +185,33 @@ def getFiles(request):
         response['page'] = calc_page
         response['limit'] = limit
         source = source[(calc_page-1)*limit:calc_page*limit]
-
-    response['records'] = source
+        response['records'] = source
+    '''
 
     return HttpResponse(json.dumps(response), content_type='application/json')
+
+
+def readFileData(fileName):
+    filePath = getFilePath(fileName)
+    isExists = os.path.exists(filePath)
+
+    xmlelem = et.parse(filePath)
+
+    xmlid = xmlelem.find('id')
+    source = xmlelem.find('source')
+    category = xmlelem.find('category')
+    title = xmlelem.find('title')
+    text = xmlelem.find('text')
+
+    response = {
+        'id': xmlid.text if xmlid is not None else '',
+        'source': source.text if source is not None else '',
+        'category': category.text if category is not None else '',
+        'title': title.text if title is not None else '',
+        'text': text.text if text is not None else '',
+    }
+
+    return response
 
 
 def getFileData(request, fileName):
