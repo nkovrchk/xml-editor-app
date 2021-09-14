@@ -1,6 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { FilterBody, FilterBlock, ArticlesFilterStyled, FilterLabel, FilterInput } from './styled';
+import React, { useMemo } from 'react';
+
 import { Text } from 'components/Text';
+
+import { FilterBody, FilterBlock, ArticlesFilterStyled, FilterLabel, FilterInput } from './styled';
 
 export interface IArticlesFilter {
     onChange: (name: string, value: string) => void;

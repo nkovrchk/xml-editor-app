@@ -111,7 +111,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     ('dist', os.path.join(BASE_DIR, 'dist')),
     ('node_modules', os.path.join(BASE_DIR, 'node_modules')),
-    ('icons', '/app/static/icons')
 ]
 
 # Default primary key field type

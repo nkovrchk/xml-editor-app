@@ -1,3 +1,8 @@
+import axios from 'axios';
+
+import { IArticle, IArticlesRestApiResponse } from 'types';
+
+import { TAppDispatch, TAppState } from '../../store';
 import {
     EArticleActionType,
     IArticleFilters,
@@ -5,9 +10,6 @@ import {
     ISetFiltersAction,
     ISetIsPendingAction,
 } from './types';
-import { IArticle, IArticlesRestApiResponse } from 'types';
-import { TAppDispatch, TAppState } from '../../store';
-import axios from 'axios';
 
 export const setArticles = (articles: IArticle[]): ISetArticlesAction => ({
     type: EArticleActionType.SET_ARTICLES,
@@ -24,19 +26,21 @@ export const setArticleFilters = (filters: IArticleFilters): ISetFiltersAction =
     payload: filters,
 });
 
-export const getArticles = () => async (dispatch: TAppDispatch, getState: () => TAppState) => {
-    try {
-        dispatch(setIsPending(true));
+export const getArticles =
+    () =>
+    async (dispatch: TAppDispatch, getState: () => TAppState): Promise<void> => {
+        try {
+            dispatch(setIsPending(true));
 
-        const { limit, offset, sortBy, sortValue } = getState().articleStore.filters;
+            const { limit, offset, sortBy, sortValue } = getState().articleStore.filters;
 
-        const response = await axios.get(
-            `api/files?offset=${offset}&limit=${limit}&sort_by=${sortBy}&sort_value=${sortValue}`,
-        );
-        const files: IArticlesRestApiResponse = response.data;
-        dispatch(setArticles(files.results));
-        dispatch(setIsPending(false));
-    } catch (e) {
-        console.log('error');
-    }
-};
+            const response = await axios.get(
+                `api/files?offset=${offset}&limit=${limit}&sort_by=${sortBy}&sort_value=${sortValue}`,
+            );
+            const files: IArticlesRestApiResponse = response.data;
+            dispatch(setArticles(files.results));
+            dispatch(setIsPending(false));
+        } catch (e) {
+            console.log('error');
+        }
+    };

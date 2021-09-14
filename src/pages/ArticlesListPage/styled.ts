@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { style } from 'styled-system';
 
 export const ListContainer = styled.div`
     margin-left: 240px;

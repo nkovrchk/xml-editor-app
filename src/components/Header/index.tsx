@@ -1,8 +1,9 @@
 import React from 'react';
-import { HeaderContainer, HeaderLink } from './styled';
+
 import { Box } from 'components/Box';
-import { Text } from 'components/Text';
 import { ROUTES } from 'routes/consts';
+
+import { HeaderContainer, HeaderLink } from './styled';
 
 export const Header: React.FC = () => {
     return (

@@ -1,5 +1,6 @@
+import { ESortValue } from 'types';
+
 import { EArticleActionType, IArticleState, TArticleAction } from './types';
-import { ESortValue } from '../../types';
 
 const defaultState: IArticleState = {
     files: [],

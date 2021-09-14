@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { space, typography } from 'styled-system';
+
 import { theme } from 'theme';
 
 export interface IText {
@@ -15,4 +17,6 @@ export const Text = styled.div<IText>`
         line-height: ${theme.typography.variant[variant ?? 'bodyRegular'].lineHeight};
         font-style: ${theme.typography.variant[variant ?? 'bodyRegular'].fontStyle};
     `}
+    ${space}
+    ${typography}
 `;

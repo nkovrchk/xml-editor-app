@@ -1,6 +1,8 @@
 import React, { ReactEventHandler } from 'react';
-import { CardStyled } from './styled';
+
 import { Text } from 'components/Text';
+
+import { CardStyled } from './styled';
 
 export interface ICard {
     title: string;

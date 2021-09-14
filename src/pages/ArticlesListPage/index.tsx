@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TAppState } from 'store';
-import { getArticles, setArticleFilters } from 'reducers/article/actions';
+import { useHistory } from 'react-router-dom';
+
+import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { Grid, GridColumn, GridRow } from 'components/Grid';
-import { useHistory } from 'react-router-dom';
-import { ArticleListPageStyled, ListContainer, FiltersContainer, FiltersFooter } from './styled';
-import { ArticlesFilter, IArticlesFilterValue } from './components/ArticlesFilter';
+import { getArticles, setArticleFilters } from 'reducers/article/actions';
+import { TAppState } from 'store';
 import { ESortValue } from 'types';
-import { Button } from 'components/Button';
+
+import { ArticlesFilter, IArticlesFilterValue } from './components/ArticlesFilter';
+import { ArticleListPageStyled, ListContainer, FiltersContainer, FiltersFooter } from './styled';
 
 export const ArticlesListPage: React.FC = () => {
     const history = useHistory();
