@@ -63,9 +63,6 @@ def getAllArticles(request):
 def getFiles(request):
     params = request.GET
 
-    print(params)
-
-
     '''
         functional filters and non-functional (limit, offset)
         response example:
@@ -85,15 +82,16 @@ def getFiles(request):
     limit = int(params['limit']) if params['limit'] is not None else None
     offset = int(params['offset']) if params['offset'] is not None else None
 
+    sort_by = params['sort_by'] if params['sort_by'] is not None else None
+    sort_value = params['sort_value'] if params['sort_value'] is not None else None
+
     '''
     search_by = params['search_by']
     search = params['search']
     page = params['page']
-    sort_by = params['sort_by']
-    sort_val = params['sort_val']
+    
     match_case = params['match_case']
     full_match = params['full_match']
-    
     response = {
         'total': 0,
         'page': 1,
@@ -114,6 +112,9 @@ def getFiles(request):
         baseName = os.path.splitext(file)
         if baseName[1] == '.xml':
             source.append(readFileData(baseName[0]))
+
+    if sort_value is not None:
+        source = source[::-1] if sort_value == 'DESC' else source
 
     if limit is not None and offset is not None:
         source = source[offset:offset + limit]

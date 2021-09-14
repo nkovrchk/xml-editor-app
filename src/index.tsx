@@ -6,18 +6,22 @@ import { Routes } from 'routes';
 import { Header } from 'components/Header';
 import { Provider } from 'react-redux';
 import { store } from './store';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './theme';
 
 document.addEventListener('DOMContentLoaded', function () {
-	ReactDOM.render(<App />, document.getElementById('root'));
+    ReactDOM.render(<App />, document.getElementById('root'));
 });
 
 const App: React.FC = () => (
-	<Provider store={store}>
-		<AppContainer>
-			<BrowserRouter basename={'/'}>
-				<Header/>
-				<Routes/>
-			</BrowserRouter>
-		</AppContainer>
-	</Provider>
+    <ThemeProvider theme={theme}>
+        <Provider store={store}>
+            <AppContainer>
+                <BrowserRouter basename={'/'}>
+                    <Header />
+                    <Routes />
+                </BrowserRouter>
+            </AppContainer>
+        </Provider>
+    </ThemeProvider>
 );

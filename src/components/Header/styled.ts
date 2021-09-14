@@ -4,9 +4,14 @@ import { Link } from 'components/Link';
 export const HeaderContainer = styled.div`
     height: 56px;
     background-color: #0d6efd;
-    border-bottom: 1px solid #F0F0F0;
+    box-shadow: 0 2px 2px -2px rgb(0, 0, 0, 0.15);
 `;
 
 export const HeaderLink = styled(Link)`
     color: #ffffff;
+    text-decoration: none;
+
+    &:hover: {
+        color: #d3d3d3;
+    }
 `;

@@ -4,6 +4,6 @@ export interface IBox {
     color?: string;
 }
 
-export const Box = styled.div<IBox> `
+export const Box = styled.div<IBox>`
     display: flex;
 `;

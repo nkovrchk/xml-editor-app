@@ -1,16 +1,23 @@
-import { IArticle } from 'types';
+import { IArticle, ESortValue } from 'types';
 
 export enum EArticleActionType {
-	SET_ARTICLES = 'SET_ARTICLES',
+    SET_ARTICLES = 'SET_ARTICLES',
     DELETE_ARTICLE = 'DELETE_ARTICLE',
     SET_IS_PENDING = 'SET_IS_PENDING',
+    SET_FILTERS = 'SET_FILTERS',
 }
 
 export interface IArticleState {
     files: IArticle[];
+    filters: IArticleFilters;
     isPending: boolean;
+}
+
+export interface IArticleFilters {
     limit: number;
     offset: number;
+    sortBy: string;
+    sortValue: ESortValue;
 }
 
 export interface ISetArticlesAction {
@@ -28,4 +35,9 @@ export interface ISetIsPendingAction {
     payload: boolean;
 }
 
-export type TArticleAction = ISetArticlesAction | IDeleteArticleAction | ISetIsPendingAction;
+export interface ISetFiltersAction {
+    type: EArticleActionType.SET_FILTERS;
+    payload: IArticleFilters;
+}
+
+export type TArticleAction = ISetArticlesAction | IDeleteArticleAction | ISetIsPendingAction | ISetFiltersAction;

@@ -2,3 +2,5 @@ repository
 package-lock.json
 node_modules
 dist
+venv
+.idea

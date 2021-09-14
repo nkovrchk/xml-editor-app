@@ -12,3 +12,14 @@ export interface IArticlesRestApiResponse {
     size: number;
     results: IArticle[];
 }
+
+export enum ESortValue {
+    ASC = 'ASC',
+    DESC = 'DESC',
+}
+
+export enum ESortBy {
+    NAME = 'NAME',
+    CATEGORY = 'CATEGORY',
+    ID = 'ID',
+}
