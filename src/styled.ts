@@ -10,5 +10,4 @@ export const ModalContainer = styled.div`
 
 export const AppContainer = styled(ModalContainer)`
     position: relative;
-    margin: 0;
 `;

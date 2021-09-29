@@ -23,6 +23,7 @@ module.exports = {
     },
     plugins: ['react', '@typescript-eslint', 'prettier'],
     rules: {
+        'import/named': 0,
         'prettier/prettier': 'error',
         'require-await': 'error',
         'linebreak-style': ['error', 'unix'],
@@ -30,6 +31,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/ban-ts-ignore': 0,
         '@typescript-eslint/explicit-function-return-type': 0,
+        'react/jsx-curly-brace-presence': 'error',
         'import/order': [
             2,
             {
@@ -51,6 +53,9 @@ module.exports = {
                 extensions: ['.js', '.jsx', '.ts', '.tsx'],
                 moduleDirectory: ['node_modules', 'src'],
             },
+        },
+        'import/parsers': {
+            '@typescript-eslint/parser': ['.ts', '.tsx'],
         },
     },
 };

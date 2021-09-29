@@ -1,9 +1,9 @@
 export interface IArticle {
-    id: string;
-    title: string;
-    category: string;
-    source: string;
-    text: string;
+    id?: string;
+    title?: string;
+    category?: string;
+    source?: string;
+    text?: string;
 }
 
 export interface IArticlesRestApiResponse {
@@ -13,7 +13,4 @@ export interface IArticlesRestApiResponse {
     results: IArticle[];
 }
 
-export enum ESortValue {
-    ASC = 'ASC',
-    DESC = 'DESC',
-}
+export type TLimit = 10 | 15 | 20;

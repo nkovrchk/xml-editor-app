@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
-import { articleReducer } from './article';
+import { articlesReducer } from './articles';
+import { editorReducer } from './editor';
 
 export const reducer = combineReducers({
-    articleStore: articleReducer,
+    editor: editorReducer,
+    articles: articlesReducer,
 });

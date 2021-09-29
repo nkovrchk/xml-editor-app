@@ -1,3 +1,5 @@
+const ARTICLE = '/articles/';
+
 export const ROUTES = {
     ROOT: {
         PATH: '/',
@@ -6,5 +8,10 @@ export const ROUTES = {
     CREATE_ARTICLE: {
         PATH: '/create-article',
         TITLE: 'Создать статью',
+    },
+    ARTICLE_EDITOR: {
+        PATH: '/articles/:articleId',
+        ROUTE: ARTICLE,
+        TITLE: 'Редактировать',
     },
 };

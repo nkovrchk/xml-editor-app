@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from xml.dom import minidom
 import lxml.etree as et
 import os
@@ -8,6 +8,10 @@ import math
 import re
 
 repository = os.path.abspath('./repository')
+
+
+def handleNotFound(request, exception):
+    return redirect('/')
 
 
 def writeXML(filePath, jsonData=None):
@@ -60,6 +64,12 @@ def getAllArticles(request):
     return HttpResponse(json.dumps(source), content_type='application/json')
 
 
+def getArticle(request, articleId):
+    file = readFileData(articleId)
+
+    return HttpResponse(json.dumps(file), content_type='application/json')
+
+
 def getFiles(request):
     params = request.GET
 
@@ -71,6 +81,7 @@ def getFiles(request):
             offset: 10,
             size: 5,
             results: [...],
+            filtered: 224,
             links: {
                 current: "localhost:8080/api/files?limit=5&offset=10",
                 prev:  "localhost:8080/api/files?limit=5&offset=5",

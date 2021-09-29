@@ -1,9 +1,11 @@
 import styled from 'styled-components';
+import { color, space, flexbox, layout } from 'styled-system';
 
-export interface IBox {
-    color?: string;
-}
+import { IBox } from './types';
 
 export const Box = styled.div<IBox>`
-    display: flex;
+    ${color}
+    ${space}
+    ${flexbox}
+    ${layout}
 `;

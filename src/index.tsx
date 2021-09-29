@@ -19,7 +19,7 @@ const App: React.FC = () => (
     <ThemeProvider theme={theme}>
         <Provider store={store}>
             <AppContainer>
-                <BrowserRouter basename={'/'}>
+                <BrowserRouter basename="/">
                     <Header />
                     <Routes />
                 </BrowserRouter>

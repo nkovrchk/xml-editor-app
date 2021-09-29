@@ -32,10 +32,10 @@ export const getArticles =
         try {
             dispatch(setIsPending(true));
 
-            const { limit, offset, sortBy, sortValue } = getState().articleStore.filters;
+            const { limit, offset, sortBy, sortValue } = getState().articles.filters;
 
             const response = await axios.get(
-                `api/files?offset=${offset}&limit=${limit}&sort_by=${sortBy}&sort_value=${sortValue}`,
+                `/files?offset=${offset}&limit=${limit}&sort_by=${sortBy}&sort_value=${sortValue}`,
             );
             const files: IArticlesRestApiResponse = response.data;
             dispatch(setArticles(files.results));

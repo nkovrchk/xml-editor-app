@@ -1,4 +1,5 @@
-import { IArticle, ESortValue } from 'types';
+import { ESortValue, ESortBy } from 'enums';
+import { IArticle, TLimit } from 'types';
 
 export enum EArticleActionType {
     SET_ARTICLES = 'SET_ARTICLES',
@@ -14,9 +15,9 @@ export interface IArticleState {
 }
 
 export interface IArticleFilters {
-    limit: number;
+    limit: TLimit;
     offset: number;
-    sortBy: string;
+    sortBy: ESortBy;
     sortValue: ESortValue;
 }
 

@@ -1,4 +1,4 @@
-import { ESortValue } from 'types';
+import { ESortValue, ESortBy } from 'enums';
 
 import { EArticleActionType, IArticleState, TArticleAction } from './types';
 
@@ -7,13 +7,13 @@ const defaultState: IArticleState = {
     filters: {
         limit: 20,
         offset: 0,
-        sortBy: 'title',
+        sortBy: ESortBy.TITLE,
         sortValue: ESortValue.ASC,
     },
     isPending: true,
 };
 
-export const articleReducer = (state: IArticleState = defaultState, action: TArticleAction): IArticleState => {
+export const articlesReducer = (state: IArticleState = defaultState, action: TArticleAction): IArticleState => {
     switch (action.type) {
         case EArticleActionType.SET_ARTICLES:
             return { ...state, files: [...action.payload] };
