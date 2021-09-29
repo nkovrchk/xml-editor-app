@@ -5,7 +5,6 @@ import { ArticleEditorPage } from 'pages/ArticleEditorPage';
 import { ArticlesListPage } from 'pages/ArticlesListPage';
 
 import { ROUTES } from './consts';
-import { EEditorAction } from '../enums';
 
 export const Routes: React.FC = () => (
     <Switch>

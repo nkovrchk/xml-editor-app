@@ -1,4 +1,5 @@
 import { IArticle } from 'types';
+
 import { EEditorAction } from '../../enums';
 
 export enum EEditorActionType {

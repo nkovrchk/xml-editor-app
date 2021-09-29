@@ -5,8 +5,8 @@
   "scripts": {
     "build": "webpack",
     "setup": "node setup.js",
-    "lint": "eslint 'src/**' --ext .js,.jsx,.tsx,.ts",
-    "lint:fix": "npm run lint --fix",
+    "lint": "eslint 'src/**' --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint 'src/**' --ext .js,.jsx,.ts,.tsx --fix",
     "init-setup": "pip install django && npm install",
     "start": "npm run build && ./venv/bin/python3 manage.py runserver"
   },
