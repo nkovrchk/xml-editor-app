@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 import { TAppDispatch, TGetState } from 'store';
+import { IArticle } from 'types';
 
-import { IArticle } from '../../types';
 import {
     EEditorActionType,
     ISaveArticleAction,
     ISetEditedArticleAction,
-    ISetHasErrors,
+    ISetHasErrorsAction,
     ISetIsPendingAction,
     ISetSourceAction,
 } from './types';
@@ -32,7 +32,7 @@ export const saveArticle = (article: IArticle): ISaveArticleAction => ({
     payload: article,
 });
 
-export const setHasErrors = (hasErrors: boolean): ISetHasErrors => ({
+export const setHasErrors = (hasErrors: boolean): ISetHasErrorsAction => ({
     type: EEditorActionType.SET_HAS_ERRORS,
     payload: hasErrors,
 });

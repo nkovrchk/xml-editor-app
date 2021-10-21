@@ -1,1 +1,3 @@
 src/static
+webpack.config.js
+setup.js

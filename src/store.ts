@@ -5,8 +5,8 @@ import { reducer } from 'reducers';
 
 export const store = createStore(reducer, applyMiddleware(thunk));
 
-export type TAppState = ReturnType<typeof store.getState>;
+export type TRootState = ReturnType<typeof store.getState>;
 
 export type TAppDispatch = typeof store.dispatch;
 
-export type TGetState = () => TAppState;
+export type TGetState = () => TRootState;

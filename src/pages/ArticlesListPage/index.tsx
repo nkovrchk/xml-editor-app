@@ -5,7 +5,7 @@ import { Box } from 'components/Box';
 import { Card } from 'components/Card';
 import { Grid, GridColumn, GridRow } from 'components/Grid';
 import { getArticles } from 'reducers/articles/actions';
-import { TAppState } from 'store';
+import { TRootState } from 'store';
 
 import { Filters } from './components/Filters';
 import { ArticleListPageStyled } from './styled';
@@ -13,7 +13,7 @@ import { ArticleListPageStyled } from './styled';
 export const ArticlesListPage: React.FC = () => {
     const dispatch = useDispatch();
 
-    const articleStore = useSelector((state: TAppState) => state.articles);
+    const articleStore = useSelector((state: TRootState) => state.articles);
 
     useEffect(() => {
         dispatch(getArticles());

@@ -1,6 +1,5 @@
+import { EEditorAction } from 'enums';
 import { IArticle } from 'types';
-
-import { EEditorAction } from '../../enums';
 
 export enum EEditorActionType {
     EDIT_ARTICLE = 'EDIT_ARTICLE',
@@ -42,7 +41,7 @@ export interface ISaveArticleAction {
     payload: IArticle;
 }
 
-export interface ISetHasErrors {
+export interface ISetHasErrorsAction {
     type: EEditorActionType.SET_HAS_ERRORS;
     payload: boolean;
 }
@@ -62,4 +61,4 @@ export type TEditorAction =
     | ISetSourceAction
     | ISetEditedArticleAction
     | ISetIsSavedAction
-    | ISetHasErrors;
+    | ISetHasErrorsAction;

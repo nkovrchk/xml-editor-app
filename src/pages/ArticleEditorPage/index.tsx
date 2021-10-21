@@ -6,7 +6,7 @@ import { Button } from 'components/Button';
 import { Field } from 'components/Field';
 import { DefaultInput, TextArea } from 'components/Input';
 import { fetchArticleData, setEditedArticle, setHasErrors, updateArticle } from 'reducers/editor/actions';
-import { TAppState } from 'store';
+import { TRootState } from 'store';
 
 import { ArticleEditorPageStyled, BackButton, EditorBlock, EditorContainer, EditorFooter } from './styled';
 
@@ -18,7 +18,7 @@ export const ArticleEditorPage: React.FC<RouteChildrenProps<IArticleEditorParams
     const articleId = match?.params.articleId;
     const dispatch = useDispatch();
     const history = useHistory();
-    const { sourceArticle, editedArticle } = useSelector((state: TAppState) => state.editor);
+    const { sourceArticle, editedArticle } = useSelector((state: TRootState) => state.editor);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     const [titleError, setTitleError] = useState('');

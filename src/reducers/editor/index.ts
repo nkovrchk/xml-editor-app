@@ -12,10 +12,10 @@ const articleObject = {
     id: '',
 };
 
-const defaultState: IEditorState = {
+const defaultState = {
     editedArticle: articleObject,
     sourceArticle: articleObject,
-    isPending: true,
+    isPending: false,
     isSaved: true,
     hasErrors: false,
     action: EEditorAction.CREATE,

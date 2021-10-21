@@ -8,14 +8,14 @@ import { Text } from 'components/Text';
 import { ESortBy, ESortValue } from 'enums';
 import { getArticles, setArticleFilters } from 'reducers/articles/actions';
 import { IArticleFilters } from 'reducers/articles/types';
-import { TAppState } from 'store';
+import { TRootState } from 'store';
 
 import { ArticleFilter, ArticleFiltersStyled, FilterBlock } from './styled';
 import { IFilterState } from './types';
 
 export const Filters: React.FC = () => {
     const dispatch = useDispatch();
-    const articleFilters = useSelector((state: TAppState) => state.articles.filters);
+    const articleFilters = useSelector((state: TRootState) => state.articles.filters);
 
     const [filters, setFilters] = useState<IFilterState>({
         limit: {

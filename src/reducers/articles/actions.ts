@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { IArticle, IArticlesRestApiResponse } from 'types';
 
-import { TAppDispatch, TAppState } from '../../store';
+import { TAppDispatch, TRootState } from '../../store';
 import {
     EArticleActionType,
     IArticleFilters,
@@ -28,7 +28,7 @@ export const setArticleFilters = (filters: IArticleFilters): ISetFiltersAction =
 
 export const getArticles =
     () =>
-    async (dispatch: TAppDispatch, getState: () => TAppState): Promise<void> => {
+    async (dispatch: TAppDispatch, getState: () => TRootState): Promise<void> => {
         try {
             dispatch(setIsPending(true));
 
