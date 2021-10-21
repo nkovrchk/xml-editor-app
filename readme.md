@@ -9,3 +9,9 @@
 Из корня проекта выполнить команду в терминале: ```npm start```
 
 После запуска необходимо перейти на [http://localhost:8000](http://localhost:8000).
+
+## Документация
+[Описание] (./documentation/overview.pdf)
+[Архитектура] (./documentation/architecture.pdf)
+[User story] (./documentation/user-story.pdf)
+[Стек технологий] (./documentation/stack.pdf)
