@@ -1,12 +1,12 @@
 const { exec } = require('child_process');
 
-const SETUP = {
-    darwin: 'pip3 install virtualenv\nvirtualenv venv\nsource ./venv/bin/activate\npip install -r requirements.txt\nnpm install',
-    win32: 'pip3 install virtualenv\nvirtualenv venv\n./venv/Scripts/activate.bat\npip install -r requirements.txt\nnpm install',
-    linux: 'pip3 install virtualenv\nvirtualenv venv\nsource ./venv/bin/activate\npip install -r requirements.txt\nnpm install',
+const setup = {
+    darwin: 'python3 -m venv venv\nsource venv/bin/activate\npip install -r requirements.txt\nnpm install',
+    win32: 'python3 -m venv venv\nvenv/Scripts/activate.bat\npip install -r requirements.txt\nnpm install',
+    linux: 'python3 -m venv venv\nsource venv/bin/activate\npip install -r requirements.txt\nnpm install',
 };
 
-exec(SETUP[process.platform], (err, stdout) => {
+exec(setup[process.platform], (err, stdout) => {
     if (err) {
         console.log(err);
         return;

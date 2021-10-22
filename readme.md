@@ -18,3 +18,5 @@
 [Стек технологий](./documentation/stack.pdf)
 
 [User story](./documentation/user-story.pdf)
+
+[Классификатор](./documentation/classifier.pdf)
