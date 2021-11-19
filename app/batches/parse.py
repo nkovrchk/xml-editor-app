@@ -8,13 +8,14 @@ import time
 from xml.dom import minidom
 from threading import Thread
 from bs4 import BeautifulSoup
+from app.consts import BASE_DIR
 
 # Consts
 today = datetime.date.today()
 dateDecrement = datetime.timedelta(days=1)
 limit = 10
 parserQueue = queue.Queue()
-directoryName = './repository'
+directoryName = f'{BASE_DIR}/repository'
 url = 'https://kgd.ru'
 
 

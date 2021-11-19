@@ -56,14 +56,14 @@ def stemming_text(text):
 
 # Подготовка дата сета
 def preparing_text(mystem, stemmer, category, russian_stopwords):
-    data = pd.read_csv('data/news.csv')
+    data = pd.read_csv('data/learning_sets.csv')
     data = data[:100000]
     stemmed_texts_list = []
     lemm_texts_list = []
     df_res = pd.DataFrame()
     news_in_cat_count = 2000
     for topic in tqdm(category):
-        df_topic = data[data['topic'] == topic][:news_in_cat_count]
+        df_topic = data[data['category'] == topic][:news_in_cat_count]
         df_res = df_res.append(df_topic, ignore_index=True)
         try:
             prep_text = [remove_multiple_spaces(remove_numbers(remove_punctuation(text.lower()))) for text in
