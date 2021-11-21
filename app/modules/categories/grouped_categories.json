@@ -1,7 +1,4 @@
-import pandas as pd
-import app.utils as utils
-
-filtered_categories = {
+{
   "Происшествия": [
     "Банкротство Инвестбанка",
     "Дело о гибели младенца в роддоме №4",
@@ -40,8 +37,7 @@ filtered_categories = {
     "Общество",
     "Акции и протесты",
     "Работа",
-    "ЖКХ",
-    "Балтика",
+    "ЖКХ"
   ],
   "Политика": [
     "Безопасность",
@@ -112,43 +108,29 @@ filtered_categories = {
     "Природа",
     "Море",
     "Погода",
+    "Балтика",
     "Экология",
     "Новости энергетики",
     "Придорожные деревья"
+  ],
+  "Другое": [
+    "Королевский замок",
+    "Дома на Ленинском проспекте",
+    "Кёнигсберг в деталях",
+    "Мосты на Острове",
+    "Искандеры в Калининградской области",
+    "Дом Советов",
+    "Голосящий КиВиН",
+    "Морской терминал в Пионерском",
+    "Куршская коса",
+    "Железная дорога",
+    "Строительство в Филинской бухте",
+    "Реконструкция улицы Дачной",
+    "Ремонт улицы Киевской",
+    "Идём на восток",
+    "Восточная эстакада",
+    "Рудник в Нивенском",
+    "Центральный рынок",
+    "Водоканал"
   ]
 }
-
-if __name__ == '__main__':
-    categories = []
-    texts = []
-
-    grouped_texts = {}
-
-    for gc in filtered_categories:
-        grouped_texts[gc] = []
-
-    repo = utils.read_repository()
-
-    for k in repo:
-        for gc in filtered_categories:
-            category = repo[k]['category']
-            text = repo[k]['text']
-            if category in filtered_categories[gc]:
-                grouped_texts[gc].append(text)
-                break
-
-    min_length = 10000
-
-    for gt in grouped_texts:
-        length = len(grouped_texts[gt])
-        if length < min_length:
-            min_length = length
-
-    for gt in grouped_texts:
-        categories.extend([gt for i in range(min_length)])
-        texts.extend(grouped_texts[gt][0:min_length])
-
-    csv_data = pd.DataFrame(
-        {'category': categories, 'text': texts})
-
-    csv_data.to_csv('data/learning_sets.csv')

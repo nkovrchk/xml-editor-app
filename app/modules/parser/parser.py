@@ -1,117 +1,107 @@
+import urllib.request
 import requests
 import os
 import lxml.etree as et
 import datetime
-import queue
+import concurrent.futures
 import re
 import time
 from xml.dom import minidom
 from threading import Thread
 from bs4 import BeautifulSoup
-
-
+from queue import Queue
 
 # Consts
+LIMIT = 10000
+BASE_URL = 'https://kgd.ru'
+TODAY = datetime.date.today()
 REPOSITORY_DIR = '../../repository'
-today = datetime.date.today()
-dateDecrement = datetime.timedelta(days=1)
-limit = 10000
-parserQueue = queue.Queue()
-url = 'https://kgd.ru'
+
+MAX_THREADS = 4
+
+numbers_queue = Queue()
+refs_queue = Queue()
+
+def get_gateway_url(date):
+    return f'{BASE_URL}/news/itemlist/date/{str(date.year)}/{str(date.month)}/{str(date.day)}/'
 
 
-def getGatewayUrl(date):
-    return f'{url}/news/itemlist/date/{str(date.year)}/{str(date.month)}/{str(date.day)}/'
+def get_news_url(news_url):
+    return f'{BASE_URL}{news_url}'
 
 
-def getNewsUrl(newsUrl):
-    return f'{url}{newsUrl}'
+def get_decrement(number):
+    return datetime.timedelta(days=number)
 
 
-def getRefs(stack, currentDate, decrement):
-    count = 0
-    while count < limit:
-        response = requests.get(getGatewayUrl(currentDate))
+def get_refs(current_date, anchor_stack, decrement_stack):
+    while anchor_stack.qsize() < LIMIT:
+        number = decrement_stack.get()
+        target_date = current_date - get_decrement(number)
+        response = requests.get(get_gateway_url(target_date))
         soup = BeautifulSoup(response.text, 'lxml')
         anchors = soup.find_all('h3', class_='tagItemTitle')
-        for i in range(0, len(anchors)):
-            href = anchors[i].find('a', href=True)['href']
+        for index in range(0, len(anchors)):
+            href = anchors[index].find('a', href=True)['href']
             if href is not None:
-                stack.put(href)
-        currentDate -= decrement
-        count += len(anchors)
+                print(f'[{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}] | {href}')
+                anchor_stack.put(href)
 
 
-def parseNews(stack, gatewayThread):
-    while gatewayThread.is_alive() or not stack.empty():
-        if not stack.empty():
-            newsHref = stack.get()
-            print(f'[{datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}] | {newsHref}')
-            fullUrl = getNewsUrl(newsHref)
-            response = requests.get(fullUrl)
+def parse_news(ref):
+    full_url = get_news_url(ref)
+    req = urllib.request.Request(url=full_url)
 
-            if response.status_code != 200:
-                continue
+    with urllib.request.urlopen(req) as f:
+        s = f.read().decode('utf-8')
+        soup = BeautifulSoup(s, 'lxml')
 
-            context = BeautifulSoup(response.text, 'lxml')
+        try:
+            text_container = soup.find('div', class_='itemFullText')
 
-            #Get attributes
+            news_title = soup.select('#k2Container > div.itemHeader > h1')[0].text.strip()
+            news_id = re.findall(r'item/(\d+)-', ref)[0]
+            news_category = soup.select('#k2Container > div.itemToolbar > span.itemCategory > a')[0].text.strip()
 
-            newsId = re.findall(r'item/(\d+)-', newsHref)[0]
-            newsTitle = context.find('h1', class_='itemTitle')
-            newsCategory = context.find('span', class_='itemCategory')
+            news_text = ''
 
-            newsText = context.find('div', class_='itemFullText')
-            newsTags = context.find('div', class_='itemTagsBlock')
+            if text_container is not None:
+                texts = text_container.findAll('p')
 
-            titleValue = ''
-            textValue = ''
-            categoryValue = ''
-            tagsValue = []
+                for t in range(len(texts)):
+                    p_text = texts[t].string
 
-            if newsTitle is not None:
-                titleValue = newsTitle.find(text=True).strip()
-
-            if newsText is not None:
-                texts = newsText.findAll('p')
-
-                for i in range(len(texts)):
-                    pText = texts[i].string
-
-                    if isinstance(pText, str):
-                        textValue += pText.replace(u'\xa0', '')
-
-            if newsCategory is not None:
-                categoryValue = newsCategory.find('a').text
-
-            if newsTags is not None:
-                tagsValue = newsTags.findAll('a')
+                    if isinstance(p_text, str):
+                        news_text += p_text.replace(u'\xa0', '')
 
             doc = et.Element('doc')
-            xmlId = et.SubElement(doc, 'id', auto="true", type="list", verify="true")
+            xml_id = et.SubElement(doc, 'id', auto="true", type="list", verify="true")
             title = et.SubElement(doc, 'title', auto="true", type="list", verify="true")
             source = et.SubElement(doc, 'source', auto="true", type="list", verify="true")
             category = et.SubElement(doc, 'category', auto="true", type="list", verify="true")
             text = et.SubElement(doc, 'text', auto="true", type="list", verify="true")
-            tags = et.SubElement(doc, 'tags', auto="true", type="list", verify="true")
 
-            xmlId.text = newsId
-            title.text = titleValue
-            source.text = fullUrl.strip()
-            category.text = categoryValue
-            text.text = et.CDATA(textValue)
+            xml_id.text = news_id
+            title.text = news_title
+            source.text = full_url.strip()
+            category.text = news_category
+            text.text = et.CDATA(news_text)
 
-            for i in range(len(tagsValue)):
-                tagValue = tagsValue[i].text
-                tagEl = et.SubElement(tags, 'value')
-                tagEl.text = tagValue
+            xml_data = minidom.parseString(et.tostring(doc, encoding='UTF-8')).toprettyxml(indent='    ')
 
-            xmlData = minidom.parseString(et.tostring(doc, encoding='UTF-8')).toprettyxml(indent='    ')
-
-            #Write file
-            file = open(f'{REPOSITORY_DIR}/{newsId}.xml', 'w', encoding='utf8')
-            file.write(xmlData)
+            # Write file
+            file = open(f'{REPOSITORY_DIR}/{news_id}.xml', 'w', encoding='utf8')
+            file.write(xml_data)
             file.close()
+        except Exception as e:
+            print(e)
+
+
+def download_news(news_refs):
+    threads = min(MAX_THREADS, len(news_refs))
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+        executor.map(parse_news, news_refs)
 
 
 if __name__ == '__main__':
@@ -119,19 +109,37 @@ if __name__ == '__main__':
     if REPOSITORY_DIR not in directory:
         os.mkdir(REPOSITORY_DIR)
 
-    gatewayTh = Thread(target=getRefs, args=(parserQueue, today, dateDecrement))
-    th1 = Thread(target=parseNews, args=(parserQueue, gatewayTh))
-    th2 = Thread(target=parseNews, args=(parserQueue, gatewayTh))
+    i = 0
+    while i < LIMIT:
+        numbers_queue.put(i + 1)
+        i += 1
 
-    startTime = time.time()
+    ref_th1 = Thread(target=get_refs, args=(TODAY, refs_queue, numbers_queue))
+    ref_th2 = Thread(target=get_refs, args=(TODAY, refs_queue, numbers_queue))
 
-    gatewayTh.start()
-    th1.start()
-    th2.start()
+    fetch_start_time = time.time()
 
-    gatewayTh.join()
-    th1.join()
-    th2.join()
+    ref_th1.start()
+    ref_th2.start()
 
-    print(f'Выполнено за {round(time.time() - startTime, 2)}с')
+    ref_th1.join()
+    ref_th2.join()
+
+    fetch_time = round(time.time() - fetch_start_time, 2)
+
+    news_urls = []
+
+    while not refs_queue.empty():
+        news_urls.append(refs_queue.get())
+
+    parse_start_time = time.time()
+
+    download_news(news_urls)
+
+    parse_time = round(time.time() - parse_start_time, 2)
+    total_time = parse_time + fetch_time
+
+    print(f'Получение ссылок выполнено за {fetch_time}с')
+    print(f'Парсинг выполнен за {parse_time}с')
+    print(f'Итоговое время: {total_time}с')
     os.system(f'ls {REPOSITORY_DIR} | wc -l')

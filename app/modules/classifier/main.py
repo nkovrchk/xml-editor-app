@@ -1,3 +1,4 @@
+import nltk
 import pandas as pd
 import string
 import re
@@ -57,7 +58,7 @@ def stemming_text(text):
 # Подготовка дата сета
 def preparing_text(mystem, stemmer, category, russian_stopwords):
     data = pd.read_csv('data/learning_sets.csv')
-    data = data[:100000]
+    data = data[:10000]
     stemmed_texts_list = []
     lemm_texts_list = []
     df_res = pd.DataFrame()
@@ -104,6 +105,8 @@ if __name__ == '__main__':
     russian_stopwords.extend(['…', '«', '»', '...', 'т.д.', 'т', 'д'])
     ###Классы нашего классификатора###
     category = ['Спорт', 'Культура', 'Интернет и СМИ', 'Наука и техника', 'Экономика']
+
+    nltk.download()
 
     # preparing_text(mystem,stemmer,category,russian_stopwords)
 
