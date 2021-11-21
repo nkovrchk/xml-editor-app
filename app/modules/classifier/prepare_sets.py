@@ -133,7 +133,7 @@ if __name__ == '__main__':
         for gc in filtered_categories:
             category = repo[k]['category']
             text = repo[k]['text']
-            if category in filtered_categories[gc]:
+            if category in filtered_categories[gc] and text is not None:
                 grouped_texts[gc].append(text)
                 break
 
