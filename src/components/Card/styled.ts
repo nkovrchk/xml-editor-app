@@ -13,6 +13,6 @@ export const CardStyled = styled.div`
     border-radius: 8px;
 
     &:hover {
-        box-shadow: 0px 1px 24px 0px rgb(0 0 0 / 30%);
+        box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 30%);
     }
 `;

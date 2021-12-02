@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from 'styled-components';
 
 import { Header } from 'components/Header';
@@ -17,13 +18,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 const App: React.FC = () => (
     <ThemeProvider theme={theme}>
-        <Provider store={store}>
-            <AppContainer>
-                <BrowserRouter basename="/">
-                    <Header />
-                    <Routes />
-                </BrowserRouter>
-            </AppContainer>
-        </Provider>
+        <RecoilRoot>
+            <Provider store={store}>
+                <AppContainer>
+                    <BrowserRouter basename="/">
+                        <Header />
+                        <Routes />
+                    </BrowserRouter>
+                </AppContainer>
+            </Provider>
+        </RecoilRoot>
     </ThemeProvider>
 );

@@ -1,9 +1,17 @@
 export interface IArticle {
-    id?: string;
-    title?: string;
-    category?: string;
-    source?: string;
-    text?: string;
+    id: string;
+    title: string;
+    category: string;
+    source: string;
+    text: string;
+}
+
+export interface IArticleErrors {
+    id: string[];
+    title: string[];
+    category: string[];
+    text: string[];
+    source: string[];
 }
 
 export interface IArticlesRestApiResponse {

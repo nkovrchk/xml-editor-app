@@ -6,12 +6,16 @@ export const ROUTES = {
         TITLE: 'Мои статьи',
     },
     CREATE_ARTICLE: {
-        PATH: '/create-article',
+        PATH: '/create',
         TITLE: 'Создать статью',
     },
     ARTICLE_EDITOR: {
         PATH: '/articles/:articleId',
         ROUTE: ARTICLE,
         TITLE: 'Редактировать',
+    },
+    CLASSIFIER: {
+        PATH: '/classifier',
+        TITLE: 'Классификатор',
     },
 };

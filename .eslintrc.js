@@ -31,6 +31,7 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/ban-ts-ignore': 0,
         '@typescript-eslint/explicit-function-return-type': 0,
+        '@typescript-eslint/explicit-module-boundary-types': 0,
         'react/jsx-curly-brace-presence': 'error',
         'import/order': [
             2,

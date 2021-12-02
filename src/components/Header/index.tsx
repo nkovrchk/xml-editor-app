@@ -9,6 +9,7 @@ export const Header: React.FC = () => {
         <HeaderContainer>
             <HeaderLink to={ROUTES.ROOT.PATH}>Главная</HeaderLink>
             <HeaderLink to={ROUTES.CREATE_ARTICLE.PATH}>Создать статью</HeaderLink>
+            <HeaderLink to={ROUTES.CLASSIFIER.PATH}>Классификатор</HeaderLink>
         </HeaderContainer>
     );
 };

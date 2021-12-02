@@ -1,27 +1,22 @@
-import nltk
 import pandas as pd
 import string
 import re
+import pickle
+import os
+
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
-
 from tqdm.auto import tqdm
-# Для нейросетки
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.model_selection import train_test_split
-import pickle
-
-import os
-
-# from utils import lemmatize
 
 
-# Предобработка Текста#
+# Предобработка Текста
 # Убираем пунктуацию
 def remove_punctuation(text):
     return "".join([ch if ch not in string.punctuation else ' ' for ch in text])
@@ -43,6 +38,7 @@ def remove_stop_words(text):
     tokens = [token for token in tokens if token not in russian_stopwords and token != ' ']
     return " ".join(tokens)
 
+
 # стемминг текста
 def stemming_text(text):
     tokens = word_tokenize(text)
@@ -51,7 +47,7 @@ def stemming_text(text):
 
 
 # Подготовка дата сета
-def preparing_text(stemmer, category, russian_stopwords):
+def preparing_text(categories):
     data = pd.read_csv('data/learning_sets.csv')
     data = data[:10000]
     stemmed_texts_list = []
@@ -59,7 +55,7 @@ def preparing_text(stemmer, category, russian_stopwords):
     df_res = pd.DataFrame()
     news_in_cat_count = 419
     prepared_text = []
-    for topic in tqdm(category):
+    for topic in tqdm(categories):
         df_topic = data[data['category'] == topic][:news_in_cat_count]
         df_res = df_res.append(df_topic, ignore_index=True)
         prep_text = []

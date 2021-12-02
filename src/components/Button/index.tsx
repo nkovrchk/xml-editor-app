@@ -1,16 +1,12 @@
-import styled from 'styled-components';
+import React from 'react';
 
-import { IButton } from './types';
+import { ButtonStyled } from './styled';
+import { IButtonStyled } from './types';
 
-export const Button = styled.button<IButton>`
-    display: inline-block;
-    background-color: #0d6efd;
-    color: white;
-    ${({ theme }) => `
-        padding: ${theme.space[2]}px ${theme.space[3]}px;
-        border-radius: ${theme.space[2]}px;
-    `}
-    border: 1px solid white;
-    cursor: pointer;
-    user-select: none;
-`;
+export interface IButton extends IButtonStyled {
+    onClick?: () => void;
+}
+
+export const Button: React.FC<IButton> = (props) => {
+    return <ButtonStyled {...props} type="button" />;
+};

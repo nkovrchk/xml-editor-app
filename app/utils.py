@@ -1,7 +1,13 @@
+from xml.dom import minidom
+from app.consts import REPOSITORY_DIR
+
 import os
 import lxml.etree as et
 
-REPOSITORY_DIR = '../../repository'
+
+def get_file_path(file_name):
+    return f'{REPOSITORY_DIR}/{file_name}.xml'
+
 
 def get_file_names():
     source = []
@@ -19,8 +25,30 @@ def get_file_names():
     return result
 
 
-def read_xml(file_name):
-    file_path = f'{REPOSITORY_DIR}/{file_name}.xml'
+def write_xml(file_name, json_data=None):
+    doc = et.Element('doc')
+    xmlid = et.SubElement(doc, 'id')
+    source = et.SubElement(doc, 'source')
+    title = et.SubElement(doc, 'title')
+    category = et.SubElement(doc, 'category')
+    text = et.SubElement(doc, 'text')
+
+    if json_data is not None:
+        xmlid.text = json_data['id']
+        source.text = json_data['source']
+        title.text = json_data['title']
+        category.text = json_data['category']
+        text.text = et.CDATA(json_data['text'])
+
+    xml_data = minidom.parseString(et.tostring(doc, encoding='UTF-8')).toprettyxml(indent='  ')
+
+    file = open(get_file_path(file_name), 'w')
+    file.write(xml_data)
+    file.close()
+
+
+def read_xml(file_base_name):
+    file_path = get_file_path(file_base_name)
 
     xml_elem = et.parse(file_path)
 

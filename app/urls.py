@@ -1,13 +1,12 @@
-from django.urls import include, path
-from . import views
+from django.urls import path
+from app.controllers.index.main import index_controller
+from app.controllers.collection.main import collection_controller
+from app.controllers.articles.main import articles_controller
+from app.controllers.classifier.main import classifier_controller
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('articles', views.getAllArticles, name='getAllArticles'),
-    path('articles/<str:articleId>', views.getArticle, name='getArticle'),
-    path('files', views.getFiles, name='getFiles'),
-    path('file/<str:fileName>', views.getFileData),
-    path('file/save/<str:fileName>', views.saveFile),
-    path('file/add/<str:fileName>', views.addFile),
-    path('file/delete/<str:fileName>', views.deleteFile),
+    path('', index_controller, name='index_controller'),
+    path('api/articles', collection_controller, name='collection_controller'),
+    path('api/articles/<str:article_id>', articles_controller, name='articles_controller'),
+    path('api/classifier', classifier_controller, name='classifier_controller'),
 ]
