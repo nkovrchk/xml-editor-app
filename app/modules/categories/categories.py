@@ -1,8 +1,7 @@
 import json
 import lxml.etree as et
 from app.utils import get_file_names
-
-REPOSITORY_DIR = '../../repository'
+from app.consts import REPOSITORY_DIR
 
 
 def get_text_category(file_name):

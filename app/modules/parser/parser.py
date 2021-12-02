@@ -10,17 +10,9 @@ from xml.dom import minidom
 from threading import Thread
 from bs4 import BeautifulSoup
 from queue import Queue
+from app.consts import REPOSITORY_DIR
+from consts import LIMIT, BASE_URL, TODAY, MAX_THREADS
 
-# Consts
-LIMIT = 10000
-BASE_URL = 'https://kgd.ru'
-TODAY = datetime.date.today()
-REPOSITORY_DIR = '../../repository'
-
-MAX_THREADS = 4
-
-numbers_queue = Queue()
-refs_queue = Queue()
 
 def get_gateway_url(date):
     return f'{BASE_URL}/news/itemlist/date/{str(date.year)}/{str(date.month)}/{str(date.day)}/'
@@ -105,6 +97,9 @@ def download_news(news_refs):
 
 
 if __name__ == '__main__':
+    numbers_queue = Queue()
+    refs_queue = Queue()
+
     directory = os.listdir()
     if REPOSITORY_DIR not in directory:
         os.mkdir(REPOSITORY_DIR)
