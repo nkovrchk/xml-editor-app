@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { Box } from 'components/Box';
 import { Button } from 'components/Button';
@@ -6,12 +7,18 @@ import { TextArea } from 'components/Input';
 import { Text } from 'components/Text';
 import { ClassifierApi } from 'net/classifier';
 
-import { ClassifierStyled } from './styled';
+import { BackButton, ClassifierStyled } from './styled';
 
 export const ClassifierPage: React.FC = () => {
     const [category, setCategory] = useState('');
     const [text, setText] = useState('');
     const [isPending, setIsPending] = useState(false);
+
+    const history = useHistory();
+
+    const goBack = useCallback(() => {
+        history.push('/');
+    }, [history]);
 
     const predictCategory = useCallback(async () => {
         setIsPending(true);
@@ -24,6 +31,7 @@ export const ClassifierPage: React.FC = () => {
 
     return (
         <ClassifierStyled>
+            <BackButton onClick={goBack}>Назад</BackButton>
             <Text variant="h4SemiBold">Классифицировать текст</Text>
             <Text mt={1} variant="body1Regular" color="textSecondary">
                 Введите текст длинной не менее 100 символов

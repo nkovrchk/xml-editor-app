@@ -5,7 +5,7 @@ import { EArticleActionType, IArticleState, TArticleAction } from './types';
 const defaultState: IArticleState = {
     files: [],
     filters: {
-        limit: 20,
+        limit: 10,
         offset: 0,
         sortBy: ESortBy.TITLE,
         sortValue: ESortValue.ASC,

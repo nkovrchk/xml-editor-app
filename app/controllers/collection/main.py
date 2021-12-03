@@ -7,6 +7,16 @@ import json
 
 
 def collection_controller(request):
+    method = request.method
+    response = {}
+
+    if method == 'GET':
+        response = get_articles(request)
+
+    return HttpResponse(json.dumps(response, ensure_ascii=False), content_type='application/json')
+
+
+def get_articles(request):
     params = request.GET
 
     '''
@@ -29,6 +39,7 @@ def collection_controller(request):
     limit = int(params['limit']) if params['limit'] is not None else None
     offset = int(params['offset']) if params['offset'] is not None else None
 
+    sort_by = params['sort_by'] if params['sort_by'] is not None else None
     sort_value = params['sort_value'] if params['sort_value'] is not None else None
 
     '''
@@ -59,8 +70,11 @@ def collection_controller(request):
         if base_name[1] == '.xml':
             source.append(read_xml(base_name[0]))
 
+    if sort_by is not None:
+        source = sorted(source, key=lambda file_data: file_data[sort_by])
+
     if sort_value is not None:
-        source = source[::-1] if sort_value == 'DESC' else source
+        source = source[::-1] if sort_value == 'desc' else source
 
     if limit is not None and offset is not None:
         source = source[offset:offset + limit]
@@ -135,4 +149,4 @@ def collection_controller(request):
         response['records'] = source
     '''
 
-    return HttpResponse(json.dumps(response, ensure_ascii=False), content_type='application/json')
+    return response

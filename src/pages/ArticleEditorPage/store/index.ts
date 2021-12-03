@@ -1,4 +1,6 @@
+import { isEqual } from 'lodash';
 import { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { atom, useRecoilState, useResetRecoilState } from 'recoil';
 
 import { ArticlesApi } from 'net/articles';
@@ -26,6 +28,7 @@ export const useEditor = () => {
     const [editorArticle, setEditorArticle] = useRecoilState(editorArticleAtom);
     const [options, setOptions] = useRecoilState(editorOptionsAtom);
     const [errors, setErrors] = useRecoilState(editorErrorsAtom);
+    const { articleId } = useParams<{ articleId?: string }>();
 
     const resetArticle = useResetRecoilState(editorArticleAtom);
     const resetOptions = useResetRecoilState(editorOptionsAtom);
@@ -52,8 +55,10 @@ export const useEditor = () => {
 
             if (response.success && response.data) {
                 setEditorArticle(response.data);
-                _setOptions({ sourceId: response.data.id });
-            } else if (!response.success && response.errors) _setErrors(response.errors);
+                _setOptions({ sourceId: response.data.id, sourceArticle: response.data });
+            } else if (!response.success && response.errors) {
+                _setErrors(response.errors);
+            }
         },
         [_setErrors, _setOptions, setEditorArticle],
     );
@@ -63,8 +68,11 @@ export const useEditor = () => {
 
         const response = await ArticlesApi.create(editorArticle?.id, editorArticle);
 
-        if (response.success) _setOptions({ sourceId: editorArticle.id });
-        else if (!response.success && response.errors) _setErrors(response.errors);
+        if (response.success) {
+            _setOptions({ sourceId: editorArticle.id, sourceArticle: editorArticle });
+        } else if (!response.success && response.errors) {
+            _setErrors(response.errors);
+        }
     }, [_setErrors, _setOptions, editorArticle]);
 
     const update = useCallback(async () => {
@@ -72,8 +80,12 @@ export const useEditor = () => {
 
         const response = await ArticlesApi.update(options.sourceId, editorArticle);
 
-        if (response.success) _setOptions({ sourceId: editorArticle.id });
-    }, [_setOptions, editorArticle, options.sourceId]);
+        if (response.success) {
+            _setOptions({ sourceId: editorArticle.id, sourceArticle: editorArticle });
+        } else if (!response.success && response.errors) {
+            _setErrors(response.errors);
+        }
+    }, [_setErrors, _setOptions, editorArticle, options.sourceId]);
 
     useEffect(() => {
         return () => {
@@ -81,7 +93,7 @@ export const useEditor = () => {
             resetOptions();
             resetErrors();
         };
-    }, [resetArticle, resetErrors, resetOptions]);
+    }, [resetArticle, resetErrors, resetOptions, articleId]);
 
     useEffect(() => {
         let hasErrors = false;
@@ -89,8 +101,12 @@ export const useEditor = () => {
             if (v.length > 0) hasErrors = true;
         }
 
-        setOptions((prevState) => ({ ...prevState, hasErrors }));
-    }, [errors, setOptions]);
+        _setOptions({ hasErrors });
+    }, [_setOptions, errors]);
+
+    useEffect(() => {
+        _setOptions({ isSaved: isEqual(options.sourceArticle, editorArticle) });
+    }, [_setOptions, editorArticle, options.sourceArticle]);
 
     return {
         editorArticle,

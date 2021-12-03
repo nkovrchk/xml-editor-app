@@ -91,5 +91,5 @@ export const theme = {
         textError: '#dc3545',
         textAction: '#0d6efd',
     },
-    space: [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40],
+    space: Array.from({ length: 25 }, (_, k) => k * 4),
 };

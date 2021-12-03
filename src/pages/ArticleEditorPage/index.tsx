@@ -5,14 +5,17 @@ import { Button } from 'components/Button';
 import { Field } from 'components/Field';
 import { DefaultInput, TextArea } from 'components/Input';
 
+import { Box } from '../../components/Box';
 import { IArticle } from '../../types';
 import { useEditor } from './store';
-import { ArticleEditorPageStyled, BackButton, EditorBlock, EditorContainer, EditorFooter } from './styled';
+import { defaultEditorErrors } from './store/consts';
+import { ArticleEditorPageStyled, BackButton, EditorBlock } from './styled';
 
 export const ArticleEditorPage: React.FC = () => {
     const { articleId } = useParams<{ articleId?: string }>();
     const history = useHistory();
-    const { editorArticle, loadArticle, setEditorArticle, saveArticle, update, errors } = useEditor();
+    const { editorArticle, loadArticle, setEditorArticle, saveArticle, update, errors, setErrors, options } =
+        useEditor();
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
@@ -27,9 +30,10 @@ export const ArticleEditorPage: React.FC = () => {
 
     const handleChange = useCallback(
         (key: keyof IArticle, value: string) => {
+            setErrors(defaultEditorErrors);
             setEditorArticle({ [key]: value });
         },
-        [setEditorArticle],
+        [setEditorArticle, setErrors],
     );
 
     const handleClick = useCallback(async () => {
@@ -37,12 +41,16 @@ export const ArticleEditorPage: React.FC = () => {
         else await saveArticle();
     }, [articleId, saveArticle, update]);
 
+    const getErrors = useCallback((errors: string[]) => {
+        return errors.map((err, i) => <Box key={i}>{err}</Box>);
+    }, []);
+
     return (
         <ArticleEditorPageStyled>
             <BackButton onClick={goBack}>Назад</BackButton>
-            <EditorContainer>
+            <Box>
                 <EditorBlock>
-                    <Field label="Идентификатор" id="article-field-id" errorMessage={errors.id[0]}>
+                    <Field label="Идентификатор" id="article-field-id" errorMessage={getErrors(errors.id)}>
                         <DefaultInput
                             onChange={(e) => handleChange('id', e.target.value)}
                             name="id"
@@ -52,7 +60,7 @@ export const ArticleEditorPage: React.FC = () => {
                     </Field>
                 </EditorBlock>
                 <EditorBlock>
-                    <Field label="Заголовок" id="article-field-title" errorMessage={errors.title[0]}>
+                    <Field label="Заголовок" id="article-field-title" errorMessage={getErrors(errors.title)}>
                         <DefaultInput
                             onChange={(e) => handleChange('title', e.target.value)}
                             name="title"
@@ -62,7 +70,7 @@ export const ArticleEditorPage: React.FC = () => {
                     </Field>
                 </EditorBlock>
                 <EditorBlock>
-                    <Field label="Ресурс" id="article-field-source" errorMessage={errors.source[0]}>
+                    <Field label="Ресурс" id="article-field-source" errorMessage={getErrors(errors.source)}>
                         <DefaultInput
                             onChange={(e) => handleChange('source', e.target.value)}
                             name="source"
@@ -72,7 +80,7 @@ export const ArticleEditorPage: React.FC = () => {
                     </Field>
                 </EditorBlock>
                 <EditorBlock>
-                    <Field label="Категория" id="article-field-category" errorMessage={errors.category[0]}>
+                    <Field label="Категория" id="article-field-category" errorMessage={getErrors(errors.category)}>
                         <DefaultInput
                             onChange={(e) => handleChange('category', e.target.value)}
                             name="category"
@@ -82,21 +90,23 @@ export const ArticleEditorPage: React.FC = () => {
                     </Field>
                 </EditorBlock>
                 <EditorBlock>
-                    <Field label="Текст" id="article-field-text" errorMessage={errors.text[0]}>
+                    <Field label="Текст" id="article-field-text" errorMessage={getErrors(errors.text)}>
                         <TextArea
                             onChange={(e) => handleChange('text', e.target.value)}
                             name="text"
                             value={editorArticle.text}
                             id="article-field-text"
                             $ref={textAreaRef}
-                            rows={20}
+                            rows={10}
                         />
                     </Field>
                 </EditorBlock>
-                <EditorFooter>
-                    <Button onClick={handleClick}>Сохранить</Button>
-                </EditorFooter>
-            </EditorContainer>
+            </Box>
+            <Box mt={4}>
+                <Button disabled={options.isSaved} onClick={handleClick}>
+                    Сохранить
+                </Button>
+            </Box>
         </ArticleEditorPageStyled>
     );
 };

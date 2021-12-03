@@ -2,11 +2,12 @@ import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Box } from 'components/Box';
-import { Card } from 'components/Card';
 import { Grid, GridColumn, GridRow } from 'components/Grid';
+import { Loader } from 'components/Loader';
 import { getArticles } from 'reducers/articles/actions';
 import { TRootState } from 'store';
 
+import { Card } from './components/Card';
 import { Filters } from './components/Filters';
 import { ArticleListPageStyled } from './styled';
 
@@ -34,9 +35,9 @@ export const ArticlesListPage: React.FC = () => {
     return (
         <ArticleListPageStyled>
             <Filters />
-            <Box marginLeft="240px">
+            <Box flex="1">
                 {articleStore.isPending ? (
-                    <div>Загрузка...</div>
+                    <Loader />
                 ) : (
                     <Grid>
                         <GridRow>{cardsComponent}</GridRow>

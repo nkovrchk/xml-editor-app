@@ -11,7 +11,7 @@ from threading import Thread
 from bs4 import BeautifulSoup
 from queue import Queue
 from app.consts import REPOSITORY_DIR
-from consts import LIMIT, BASE_URL, TODAY, MAX_THREADS
+from consts import LIMIT, BASE_URL, DAYS_BACK, MAX_THREADS
 
 
 def get_gateway_url(date):
@@ -100,6 +100,8 @@ if __name__ == '__main__':
     numbers_queue = Queue()
     refs_queue = Queue()
 
+    start_date = datetime.date.today() - get_decrement(DAYS_BACK)
+
     directory = os.listdir()
     if REPOSITORY_DIR not in directory:
         os.mkdir(REPOSITORY_DIR)
@@ -109,8 +111,8 @@ if __name__ == '__main__':
         numbers_queue.put(i + 1)
         i += 1
 
-    ref_th1 = Thread(target=get_refs, args=(TODAY, refs_queue, numbers_queue))
-    ref_th2 = Thread(target=get_refs, args=(TODAY, refs_queue, numbers_queue))
+    ref_th1 = Thread(target=get_refs, args=(start_date, refs_queue, numbers_queue))
+    ref_th2 = Thread(target=get_refs, args=(start_date, refs_queue, numbers_queue))
 
     fetch_start_time = time.time()
 

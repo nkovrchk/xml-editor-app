@@ -13,7 +13,13 @@ export interface IField {
 export const Field: React.FC<IField> = ({ id, label, errorMessage, children }) => {
     return (
         <FieldStyled>
-            <LabelStyled htmlFor={id}>{label ? <Text variant="body1Regular">{label}</Text> : null}</LabelStyled>
+            <LabelStyled htmlFor={id}>
+                {label ? (
+                    <Text variant="body2Regular" color="textSecondary">
+                        {label}
+                    </Text>
+                ) : null}
+            </LabelStyled>
             {children}
             {errorMessage ? (
                 <Text variant="caption1Regular" color="textError">

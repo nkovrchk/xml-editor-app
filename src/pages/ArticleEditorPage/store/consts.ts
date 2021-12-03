@@ -13,6 +13,9 @@ export const defaultEditorOptions: IEditorOptionsAtom = {
     sourceId: '',
     isPending: false,
     hasErrors: false,
+    isSaved: true,
+    showIsSuccess: false,
+    sourceArticle: defaultEditorArticle,
 };
 
 export const defaultEditorErrors: IArticleErrors = {

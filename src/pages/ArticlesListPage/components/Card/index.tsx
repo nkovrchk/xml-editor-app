@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Text } from 'components/Text';
 import { ROUTES } from 'routes/consts';
 
+import { Box } from '../../../../components/Box';
 import { CardStyled } from './styled';
 
 export interface ICard {
@@ -21,9 +22,14 @@ export const Card: React.FC<ICard> = ({ title, id, category }) => {
 
     return (
         <CardStyled onClick={handleRoute}>
-            <Text mb={2} color="textSecondary" variant="caption1Regular">
-                {category}
-            </Text>
+            <Box display="flex" mb={2} alignItems="center" justifyContent="space-between">
+                <Text color="textSecondary" variant="caption1Regular">
+                    {category}
+                </Text>
+                <Text variant="caption2SemiBold" color="textSecondary">
+                    #{id}
+                </Text>
+            </Box>
             <Text variant="h4SemiBold">{title}</Text>
         </CardStyled>
     );

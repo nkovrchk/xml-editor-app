@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
 export const ArticleListPageStyled = styled.div`
-    padding-top: 20px;
-    position: relative;
+    padding-top: 24px;
     display: flex;
     flex-wrap: wrap;
 `;
