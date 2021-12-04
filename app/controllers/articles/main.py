@@ -1,4 +1,4 @@
-from os import path, rename
+from os import path, rename, remove
 from app.utils import write_xml, get_file_path, read_xml
 from django.http import HttpResponse
 from functools import reduce
@@ -20,6 +20,9 @@ def articles_controller(request, article_id):
     # Update article
     elif method == 'PATCH':
         response = update_article(request, article_id)
+    # Delete article
+    elif method == 'DELETE':
+        response = delete_article(article_id)
 
     return HttpResponse(json.dumps(response, ensure_ascii=False), content_type='application/json')
 
@@ -145,4 +148,13 @@ def update_article(request, article_id):
 
     return {
         'success': True,
+    }
+
+
+def delete_article(article_id):
+    file_path = get_file_path(article_id)
+    remove(file_path)
+
+    return {
+        'success': True
     }

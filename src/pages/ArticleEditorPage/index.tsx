@@ -6,6 +6,7 @@ import { Field } from 'components/Field';
 import { DefaultInput, TextArea } from 'components/Input';
 
 import { Box } from '../../components/Box';
+import { ArticlesApi } from '../../net/articles';
 import { IArticle } from '../../types';
 import { useEditor } from './store';
 import { defaultEditorErrors } from './store/consts';
@@ -44,6 +45,10 @@ export const ArticleEditorPage: React.FC = () => {
     const getErrors = useCallback((errors: string[]) => {
         return errors.map((err, i) => <Box key={i}>{err}</Box>);
     }, []);
+
+    const handleDelete = useCallback(() => {
+        if (articleId) ArticlesApi.delete(articleId).then(() => history.push('/'));
+    }, [articleId, history]);
 
     return (
         <ArticleEditorPageStyled>
@@ -102,10 +107,15 @@ export const ArticleEditorPage: React.FC = () => {
                     </Field>
                 </EditorBlock>
             </Box>
-            <Box mt={4}>
+            <Box display="flex" justifyContent="space-between" mt={4}>
                 <Button disabled={options.isSaved || options.hasErrors} onClick={handleClick}>
                     {articleId ? 'Сохранить' : 'Создать'}
                 </Button>
+                {articleId ? (
+                    <Button onClick={handleDelete} variant="delete">
+                        Удалить
+                    </Button>
+                ) : null}
             </Box>
         </ArticleEditorPageStyled>
     );

@@ -16,4 +16,7 @@ export const ArticlesApi = {
     update: (articleId: string, article: IArticle): Promise<IArticlesResponseSchema> => {
         return http.patch(`/articles/${articleId}`, article).then(({ data }) => data);
     },
+    delete: (articleId: string) => {
+        return http.delete(`/articles/${articleId}`).then(({ data }) => data);
+    },
 };

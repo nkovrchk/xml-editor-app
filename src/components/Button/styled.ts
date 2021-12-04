@@ -4,7 +4,7 @@ import { IButtonStyled } from './types';
 
 export const ButtonStyled = styled.button<IButtonStyled>`
     display: inline-block;
-    background-color: #0d6efd;
+
     color: white;
     border: 1px solid white;
     cursor: pointer;
@@ -26,5 +26,18 @@ export const ButtonStyled = styled.button<IButtonStyled>`
             return `
                 width: 100%;
             `;
+    }}
+
+    ${({ variant }) => {
+        switch (variant) {
+            case 'primary':
+                return `
+                    background-color: #0d6efd;
+                `;
+            case 'delete':
+                return `
+                    background-color:#dc3545
+                `;
+        }
     }}
 `;

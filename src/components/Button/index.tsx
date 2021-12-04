@@ -8,5 +8,5 @@ export interface IButton extends IButtonStyled {
 }
 
 export const Button: React.FC<IButton> = (props) => {
-    return <ButtonStyled {...props} type="button" />;
+    return <ButtonStyled {...props} type="button" variant={props.variant || 'primary'} />;
 };
