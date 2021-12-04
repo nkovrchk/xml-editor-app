@@ -21,8 +21,8 @@ export const CardStyled = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
-        height: 48px;
+        height: 72px;
     }
 `;

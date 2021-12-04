@@ -1,116 +1,83 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
 
 import { Box } from 'components/Box';
 import { Button } from 'components/Button';
 import { EOptionType, Option } from 'components/Option';
 import { Text } from 'components/Text';
-import { ESortBy, ESortValue } from 'enums';
-import { getArticles, setArticleFilters } from 'reducers/articles/actions';
-import { IArticleFilters } from 'reducers/articles/types';
-import { TRootState } from 'store';
+import { ESortBy, ESortDirection } from 'enums';
 
+import { useArticleList } from '../../store';
+import { ISelectedFiltersAtom } from '../../store/types';
 import { ArticleFilter, ArticleFiltersStyled, FilterBlock } from './styled';
-import { IFilterState } from './types';
 
-export const Filters: React.FC = () => {
-    const dispatch = useDispatch();
-    const articleFilters = useSelector((state: TRootState) => state.articles.filters);
+const limitOptions = [
+    { title: '20', value: 20 },
+    { title: '40', value: 40 },
+    { title: '60', value: 60 },
+];
 
-    const [filters, setFilters] = useState<IFilterState>({
-        limit: {
-            title: 'Показывать по:',
-            values: [
-                { title: '10', value: 10, isSelected: true },
-                { title: '15', value: 15 },
-                { title: '20', value: 20 },
-            ],
+const sortByOptions = [
+    { title: 'Название', value: ESortBy.TITLE },
+    { title: 'ID', value: ESortBy.ID },
+    { title: 'Категория', value: ESortBy.CATEGORY },
+];
+
+const sortValueOptions = [
+    { title: 'по возрастанию', value: ESortDirection.ASC },
+    { title: 'по убыванию', value: ESortDirection.DESC },
+];
+
+export const FiltersComponent: React.FC = () => {
+    const { selectedFilters, fetch, setSelectedFilters, setPage } = useArticleList();
+
+    const handleFilterChange = useCallback(
+        (key: keyof ISelectedFiltersAtom, value) => {
+            setSelectedFilters({ [key]: value });
         },
-        sortBy: {
-            title: 'Сортировать по:',
-            values: [
-                { title: 'имя', value: ESortBy.TITLE, isSelected: true },
-                { title: 'категория', value: ESortBy.CATEGORY },
-                { title: 'идентификатор', value: ESortBy.ID },
-            ],
-        },
-        sortValue: {
-            title: 'Порядок:',
-            values: [
-                { title: 'по возрастанию', value: ESortValue.ASC, isSelected: true },
-                { title: 'по убыванию', value: ESortValue.DESC },
-            ],
-        },
-    });
+        [setSelectedFilters],
+    );
 
-    const setFiltersCallback = useCallback((prop: keyof IFilterState, val) => {
-        setFilters((prevState) => {
-            const filters = { ...prevState };
-
-            filters[prop].values.forEach((v) => (v.isSelected = v.value === val));
-
-            return filters;
-        });
-    }, []);
-
-    const getFilters = useCallback(
-        (key: keyof IFilterState) => (
+    const renderFilters = useCallback(
+        (title: string, options: { title: string; value: any }[], key: keyof ISelectedFiltersAtom) => (
             <ArticleFilter>
-                <Text variant="body1Regular">{filters[key].title}</Text>
+                <Text color="textSecondary">{title}</Text>
                 <Box mt={2}>
-                    {filters[key].values.map(({ title, value, isSelected = false }, i) => (
+                    {options.map(({ title, value }, i) => (
                         <FilterBlock key={i}>
                             <Option
                                 title={title}
                                 optionType={EOptionType.RADIO}
-                                onChange={() => {
-                                    setFiltersCallback(key, value);
-                                }}
-                                isActive={isSelected}
+                                onChange={() => handleFilterChange(key, value)}
+                                isActive={selectedFilters[key] === value}
                             />
                         </FilterBlock>
                     ))}
                 </Box>
             </ArticleFilter>
         ),
-        [filters, setFiltersCallback],
+        [handleFilterChange, selectedFilters],
     );
 
-    const limitFilters = useMemo(() => {
-        return getFilters('limit');
-    }, [getFilters]);
-
-    const sortByFilters = useMemo(() => {
-        return getFilters('sortBy');
-    }, [getFilters]);
-
-    const sortValueFilters = useMemo(() => {
-        return getFilters('sortValue');
-    }, [getFilters]);
-
-    const onButtonClick = () => {
-        const { limit, sortValue, sortBy } = filters;
-
-        const mappedFilters: IArticleFilters = {
-            offset: articleFilters.offset,
-            limit: limit.values.find((v) => v.isSelected)?.value || 10,
-            sortValue: sortValue.values.find((v) => v.isSelected)?.value || ESortValue.ASC,
-            sortBy: sortBy.values.find((v) => v.isSelected)?.value || ESortBy.TITLE,
-        };
-
-        dispatch(setArticleFilters(mappedFilters));
-        dispatch(getArticles());
-    };
+    const handleSubmit = useCallback(() => {
+        setPage(1);
+        fetch();
+    }, [fetch, setPage]);
 
     return (
         <ArticleFiltersStyled>
-            <Text pb={2} variant="h4SemiBold">
+            <Text pb={2} variant="h5SemiBold">
                 Фильтры
             </Text>
-            {limitFilters}
-            {sortByFilters}
-            {sortValueFilters}
-            <Button onClick={onButtonClick}>Подтвердить</Button>
+            {renderFilters('показывать по:', limitOptions, 'limit')}
+            {renderFilters('сортировать по:', sortByOptions, 'sortBy')}
+            {renderFilters('порядок:', sortValueOptions, 'sortDirection')}
+            <Box display="flex" justifyContent="center">
+                <Button onClick={handleSubmit} fullWidth>
+                    Применить
+                </Button>
+            </Box>
         </ArticleFiltersStyled>
     );
 };
+
+export const Filters = React.memo(FiltersComponent);

@@ -28,6 +28,13 @@ export const theme = {
             fontFamily: '"SB Sans Text", Helvetica, Arial, sans-serif',
             letterSpacing: '-0.300px',
         },
+        h5SemiBold: {
+            fontSize: '18px',
+            lineHeight: '22px',
+            fontWeight: 600,
+            fontFamily: '"SB Sans Text", Helvetica, Arial, sans-serif',
+            letterSpacing: '-0.300px',
+        },
         body1Regular: {
             fontSize: '16px',
             lineHeight: '20px',

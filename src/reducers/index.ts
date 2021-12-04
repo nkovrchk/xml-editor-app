@@ -1,7 +1,0 @@
-import { combineReducers } from 'redux';
-
-import { articlesReducer } from './articles';
-
-export const reducer = combineReducers({
-    articles: articlesReducer,
-});

@@ -13,7 +13,7 @@ export interface ICard {
     id?: string;
 }
 
-export const Card: React.FC<ICard> = ({ title, id, category }) => {
+export const CardComponent: React.FC<ICard> = ({ title, id, category }) => {
     const history = useHistory();
 
     const handleRoute = useCallback(() => {
@@ -34,3 +34,5 @@ export const Card: React.FC<ICard> = ({ title, id, category }) => {
         </CardStyled>
     );
 };
+
+export const Card = React.memo(CardComponent);

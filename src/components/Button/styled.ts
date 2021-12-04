@@ -20,4 +20,11 @@ export const ButtonStyled = styled.button<IButtonStyled>`
         cursor: default;
         opacity: 0.6;
     }
+
+    ${({ fullWidth }) => {
+        if (fullWidth)
+            return `
+                width: 100%;
+            `;
+    }}
 `;

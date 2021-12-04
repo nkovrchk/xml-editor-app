@@ -1,5 +1,5 @@
 BASE_URL = 'https://kgd.ru'
-DAYS_BACK = 0
+DAYS_BACK = 100
 
-LIMIT = 10
+LIMIT = 1500
 MAX_THREADS = 4

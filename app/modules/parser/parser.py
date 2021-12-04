@@ -3,7 +3,6 @@ import requests
 import os
 import lxml.etree as et
 import datetime
-import concurrent.futures
 import re
 import time
 from xml.dom import minidom
@@ -12,6 +11,8 @@ from bs4 import BeautifulSoup
 from queue import Queue
 from app.consts import REPOSITORY_DIR
 from consts import LIMIT, BASE_URL, DAYS_BACK, MAX_THREADS
+from tqdm import tqdm
+from concurrent.futures import ThreadPoolExecutor
 
 
 def get_gateway_url(date):
@@ -85,15 +86,28 @@ def parse_news(ref):
             file = open(f'{REPOSITORY_DIR}/{news_id}.xml', 'w', encoding='utf8')
             file.write(xml_data)
             file.close()
-        except Exception as e:
-            print(e)
+        except Exception:
+            pass
 
 
 def download_news(news_refs):
     threads = min(MAX_THREADS, len(news_refs))
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        executor.map(parse_news, news_refs)
+    with ThreadPoolExecutor(max_workers=threads) as executor:
+        results = list(tqdm(executor.map(parse_news, news_refs), total=len(news_refs)))
+    return results
+
+
+def split(a, n):
+    k, m = divmod(len(a), n)
+    return list((a[index * k + min(index, m):(index + 1) * k + min(index + 1, m)] for index in range(n)))
+
+
+def parse_news_iterate(urls):
+    with tqdm(total=len(urls)*MAX_THREADS, position=0, leave=True) as pbar:
+        for url in tqdm(urls, position=0, leave=True):
+            parse_news(url)
+            pbar.update(MAX_THREADS)
 
 
 if __name__ == '__main__':
@@ -111,16 +125,15 @@ if __name__ == '__main__':
         numbers_queue.put(i + 1)
         i += 1
 
-    ref_th1 = Thread(target=get_refs, args=(start_date, refs_queue, numbers_queue))
-    ref_th2 = Thread(target=get_refs, args=(start_date, refs_queue, numbers_queue))
+    url_threads = [Thread(target=get_refs, args=(start_date, refs_queue, numbers_queue)) for i in range(2)]
 
     fetch_start_time = time.time()
 
-    ref_th1.start()
-    ref_th2.start()
+    for u_th in url_threads:
+        u_th.start()
 
-    ref_th1.join()
-    ref_th2.join()
+    for u_th in url_threads:
+        u_th.join()
 
     fetch_time = round(time.time() - fetch_start_time, 2)
 
@@ -130,6 +143,18 @@ if __name__ == '__main__':
         news_urls.append(refs_queue.get())
 
     parse_start_time = time.time()
+
+    '''
+    url_chunks = split(news_urls, MAX_THREADS)
+
+    parse_threads = [Thread(target=parse_news_iterate, args=(url_chunks[i],)) for i in range(MAX_THREADS)]
+
+    for pt in parse_threads:
+        pt.start()
+
+    for pt in parse_threads:
+        pt.join()
+    '''
 
     download_news(news_urls)
 

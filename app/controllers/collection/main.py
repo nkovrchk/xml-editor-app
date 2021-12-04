@@ -1,3 +1,4 @@
+import math
 from os import walk, path
 from app.consts import REPOSITORY_DIR
 from app.utils import read_xml
@@ -18,6 +19,8 @@ def collection_controller(request):
 
 def get_articles(request):
     params = request.GET
+
+    response = {}
 
     '''
         functional filters and non-functional (limit, offset)
@@ -76,15 +79,19 @@ def get_articles(request):
     if sort_value is not None:
         source = source[::-1] if sort_value == 'desc' else source
 
+    filtered_articles = len(source)
+
     if limit is not None and offset is not None:
         source = source[offset:offset + limit]
+        total_pages = math.ceil(filtered_articles / limit)
+        current_page = math.ceil(offset / limit) + 1
 
-    response = {
-        'offset': offset,
-        'limit': limit,
-        'size': len(source),
-        'results': source,
-    }
+        response['currentPage'] = current_page
+
+        response['previousPages'] = [current_page - 1] if current_page > 1 else []
+        response['nextPages'] = [current_page + 1] if current_page < total_pages else []
+
+    response['results'] = source
 
     '''
     fileDetails = []

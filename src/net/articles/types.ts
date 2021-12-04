@@ -5,3 +5,10 @@ export interface IArticlesResponseSchema {
     data?: IArticle;
     errors?: IArticleErrors;
 }
+
+export interface ICollectionGetResponse {
+    currentPage: number;
+    previousPages: number[];
+    nextPages: number[];
+    results: IArticle[];
+}

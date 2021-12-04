@@ -1,4 +1,4 @@
-import { ESortBy, ESortValue } from 'enums';
+import { ESortBy, ESortDirection } from 'enums';
 import { TLimit } from 'types';
 
 export interface IFilterData<T> {
@@ -15,5 +15,5 @@ export interface IFilterValue<T> {
 export interface IFilterState {
     limit: IFilterData<TLimit>;
     sortBy: IFilterData<ESortBy>;
-    sortValue: IFilterData<ESortValue>;
+    sortValue: IFilterData<ESortDirection>;
 }

@@ -5,4 +5,5 @@ import { theme } from 'theme';
 export interface IButtonStyled extends SpaceProps, LayoutProps {
     color?: keyof typeof theme.colors;
     disabled?: boolean;
+    fullWidth?: boolean;
 }
