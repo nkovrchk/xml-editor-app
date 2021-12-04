@@ -104,7 +104,7 @@ export const ArticleEditorPage: React.FC = () => {
             </Box>
             <Box mt={4}>
                 <Button disabled={options.isSaved || options.hasErrors} onClick={handleClick}>
-                    Сохранить
+                    {articleId ? 'Сохранить' : 'Создать'}
                 </Button>
             </Box>
         </ArticleEditorPageStyled>
