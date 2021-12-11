@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { atom, useRecoilState, useResetRecoilState } from 'recoil';
 
 import { ArticlesApi } from 'net/articles';
@@ -34,6 +34,7 @@ export const useArticleList = () => {
     const [selectedFilters, setSelectedFilters] = useRecoilState(selectedFiltersAtom);
     const [listOptions, setListOptions] = useRecoilState(listOptionsAtom);
     const [pagination, setPagination] = useRecoilState(paginationAtom);
+    const [filteredArticles, setFilteredArticles] = useState(0);
 
     const resetList = useResetRecoilState(articleListAtom);
     const resetFilters = useResetRecoilState(selectedFiltersAtom);
@@ -68,6 +69,7 @@ export const useArticleList = () => {
         ArticlesApi.getCollection(query)
             .then((res) => {
                 setArticleList(res.results);
+                setFilteredArticles(res.filtered);
                 setPagination({
                     currentPage: res.currentPage,
                     nextPages: res.nextPages,
@@ -84,6 +86,7 @@ export const useArticleList = () => {
             resetList();
             resetFilters();
             resetOptions();
+            setFilteredArticles(0);
         };
     }, [resetFilters, resetList, resetOptions]);
 
@@ -95,5 +98,6 @@ export const useArticleList = () => {
         setSelectedFilters: _setSelectedFilters,
         pagination,
         setPage,
+        filteredArticles,
     };
 };

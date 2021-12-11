@@ -22,3 +22,5 @@ export interface IArticlesRestApiResponse {
 }
 
 export type TLimit = 10 | 15 | 20;
+
+export type TModalSize = 'xxs' | 'xs' | 'm' | 's' | 'l' | 'xl';

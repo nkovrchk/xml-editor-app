@@ -11,4 +11,5 @@ export interface ICollectionGetResponse {
     previousPages: number[];
     nextPages: number[];
     results: IArticle[];
+    filtered: number;
 }

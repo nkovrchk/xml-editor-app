@@ -1,16 +1,20 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { Box } from 'components/Box';
 import { Button } from 'components/Button';
 import { Field } from 'components/Field';
 import { DefaultInput, TextArea } from 'components/Input';
+import { Text } from 'components/Text';
 
-import { Box } from '../../components/Box';
 import { ArticlesApi } from '../../net/articles';
 import { IArticle } from '../../types';
+import { DeleteModal } from './components/DeleteModal';
 import { useEditor } from './store';
 import { defaultEditorErrors } from './store/consts';
 import { ArticleEditorPageStyled, BackButton, EditorBlock } from './styled';
+
+const TIMEOUT = 3000;
 
 export const ArticleEditorPage: React.FC = () => {
     const { articleId } = useParams<{ articleId?: string }>();
@@ -18,6 +22,9 @@ export const ArticleEditorPage: React.FC = () => {
     const { editorArticle, loadArticle, setEditorArticle, saveArticle, update, errors, setErrors, options } =
         useEditor();
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const [message, setMessage] = useState('');
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         if (articleId) {
@@ -38,8 +45,15 @@ export const ArticleEditorPage: React.FC = () => {
     );
 
     const handleClick = useCallback(async () => {
-        if (articleId) await update();
-        else await saveArticle();
+        if (articleId) {
+            await update();
+            setMessage('Данные обновлены!');
+        } else {
+            await saveArticle();
+            setMessage('Статья добавлена!');
+            setIsBlocked(true);
+        }
+        setTimeout(() => setMessage(''), TIMEOUT);
     }, [articleId, saveArticle, update]);
 
     const getErrors = useCallback((errors: string[]) => {
@@ -50,18 +64,27 @@ export const ArticleEditorPage: React.FC = () => {
         if (articleId) ArticlesApi.delete(articleId).then(() => history.push('/'));
     }, [articleId, history]);
 
+    const openModal = useCallback(() => setShowModal(true), []);
+    const closeModal = useCallback(() => setShowModal(false), []);
+
     return (
         <ArticleEditorPageStyled>
             <BackButton onClick={goBack}>Назад</BackButton>
             <Box>
                 <EditorBlock>
                     <Field label="Идентификатор" id="article-field-id" errorMessage={getErrors(errors.id)}>
-                        <DefaultInput
-                            onChange={(e) => handleChange('id', e.target.value)}
-                            name="id"
-                            value={editorArticle.id}
-                            id="article-field-id"
-                        />
+                        {articleId ? (
+                            <Text variant="body1Regular" mt={2}>
+                                {editorArticle.id}
+                            </Text>
+                        ) : (
+                            <DefaultInput
+                                onChange={(e) => handleChange('id', e.target.value)}
+                                name="id"
+                                value={editorArticle.id}
+                                id="article-field-id"
+                            />
+                        )}
                     </Field>
                 </EditorBlock>
                 <EditorBlock>
@@ -107,16 +130,25 @@ export const ArticleEditorPage: React.FC = () => {
                     </Field>
                 </EditorBlock>
             </Box>
+            {message.length ? (
+                <Text mt={2} color="textSuccess" variant="body1Regular">
+                    {message}
+                </Text>
+            ) : null}
             <Box display="flex" justifyContent="space-between" mt={4}>
-                <Button disabled={options.isSaved || options.hasErrors} onClick={handleClick}>
+                <Button
+                    disabled={options.isSaved || options.hasErrors || (!articleId && isBlocked)}
+                    onClick={handleClick}
+                >
                     {articleId ? 'Сохранить' : 'Создать'}
                 </Button>
                 {articleId ? (
-                    <Button onClick={handleDelete} variant="delete">
+                    <Button onClick={openModal} variant="delete">
                         Удалить
                     </Button>
                 ) : null}
             </Box>
+            {showModal ? <DeleteModal onDelete={handleDelete} onClose={closeModal} /> : null}
         </ArticleEditorPageStyled>
     );
 };

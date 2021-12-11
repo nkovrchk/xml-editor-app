@@ -36,6 +36,7 @@ module.exports = {
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
         '@typescript-eslint/no-explicit-any': 0,
+        '@typescript-eslint/no-empty-function': 0,
         'import/order': [
             2,
             {

@@ -97,6 +97,7 @@ export const theme = {
         textSecondary: '#939393',
         textError: '#dc3545',
         textAction: '#0d6efd',
+        textSuccess: '#198754',
     },
     space: Array.from({ length: 25 }, (_, k) => k * 4),
 };

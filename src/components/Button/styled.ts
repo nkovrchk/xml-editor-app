@@ -34,9 +34,13 @@ export const ButtonStyled = styled.button<IButtonStyled>`
                 return `
                     background-color: #0d6efd;
                 `;
+            case 'secondary':
+                return `
+                    background-color: #6c757d;
+                `;
             case 'delete':
                 return `
-                    background-color:#dc3545
+                    background-color:#dc3545;
                 `;
         }
     }}

@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from 'react';
 import { Box } from 'components/Box';
 import { Grid, GridColumn, GridRow } from 'components/Grid';
 import { Loader } from 'components/Loader';
+import { Text } from 'components/Text';
 
 import { Card } from './components/Card';
 import { Filters } from './components/Filters';
@@ -17,6 +18,7 @@ export const ArticlesListPage: React.FC = () => {
         fetch,
         setPage,
         pagination: { pagesToShow, currentPage },
+        filteredArticles,
     } = useArticleList();
 
     const cardsComponent = useMemo(
@@ -38,13 +40,17 @@ export const ArticlesListPage: React.FC = () => {
     return (
         <ArticleListPageStyled>
             <Filters />
+            <Box>{}</Box>
             <Box flex="1">
                 {isPending ? (
                     <Loader />
                 ) : (
-                    <Grid>
-                        <GridRow>{cardsComponent}</GridRow>
-                    </Grid>
+                    <Box>
+                        <Text variant="body1SemiBold" pl={6} mb={4}>{`Найдено статей: ${filteredArticles}`}</Text>
+                        <Grid>
+                            <GridRow>{cardsComponent}</GridRow>
+                        </Grid>
+                    </Box>
                 )}
                 {isPending ? null : <Pagination pages={pagesToShow} currentPage={currentPage} handleChange={setPage} />}
             </Box>

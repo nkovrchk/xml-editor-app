@@ -80,6 +80,7 @@ def get_articles(request):
         source = source[::-1] if sort_value == 'desc' else source
 
     filtered_articles = len(source)
+    response['filtered'] = filtered_articles
 
     if limit is not None and offset is not None:
         source = source[offset:offset + limit]
@@ -92,68 +93,5 @@ def get_articles(request):
         response['nextPages'] = [current_page + 1] if current_page < total_pages else []
 
     response['results'] = source
-
-    '''
-    fileDetails = []
-
-    for f in source:
-        data = {}
-
-        dataPath = f'{repository}/{f}.xml'
-
-        dataId = et.parse(dataPath).find('id').text
-        dataTitle = et.parse(dataPath).find('title').text
-
-        data['id'] = dataId if dataId is not None else ''
-        data['title'] = dataTitle if dataTitle is not None else ''
-        data['name'] = f
-
-        fileDetails.append(data)
-
-    if len(search) > 0:
-        if full_match == 'true' and match_case == 'false':
-            pattern = re.compile(f'^{search}$')
-
-        elif full_match == 'true':
-            pattern = re.compile(f'^{search}$', re.IGNORECASE)
-
-        elif match_case == 'true':
-            pattern = re.compile(f'{search}')
-
-        else:
-            pattern = re.compile(f'{search}', re.IGNORECASE)
-
-        temp = []
-
-        for f in fileDetails:
-            matchings = re.findall(pattern, f[search_by])
-
-            if len(matchings) > 0:
-                temp.append(f['name'])
-
-        source = temp
-        # source = [f['name'] for f in fileDetails if re.match(pattern, f[search_by])]
-
-    response['total'] = len(source)
-
-    if sort_by is not None and sort_val is not None:
-        source.sort()
-
-        if sort_val == 'desc':
-            source = source[::-1]
-
-    if page is not None and limit is not None:
-        page = int(page)
-        limit = int(limit)
-
-        total_pages = math.ceil(len(source)/limit)
-        calc_page = total_pages if page > total_pages else page if page > 0 else 1
-
-        # 0:9; 10:19; 20:29
-        response['page'] = calc_page
-        response['limit'] = limit
-        source = source[(calc_page-1)*limit:calc_page*limit]
-        response['records'] = source
-    '''
 
     return response
