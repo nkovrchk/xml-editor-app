@@ -11,10 +11,13 @@ module.exports = {
         '@babel/preset-typescript',
     ],
     plugins: [
-        ['module-resolver', { root: ['src'] }],
+        [
+            'module-resolver',
+            {
+                root: ['src'],
+            },
+        ],
         'babel-plugin-styled-components',
         '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-proposal-optional-chaining',
-        '@babel/plugin-transform-typescript',
     ],
 };

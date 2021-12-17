@@ -16,19 +16,6 @@ export const EditorBlock = styled(Box)`
     }
 `;
 
-export const EditorFooter = styled.div`
-    margin-top: ${({ theme }) => theme.space[3]}px;
-`;
-
-export const EditorContainer = styled.div`
-    margin: 0 auto;
-    background-color: white;
-    padding: 24px 20px;
-    box-shadow: 0px 1px 3px 0px rgb(0, 0, 0, 0.15);
-    border-radius: ${({ theme }) => theme.space[2]}px;
-    margin-bottom: ${({ theme }) => theme.space[10]}px;
-`;
-
 export const BackButton = styled.div`
     margin-bottom: ${({ theme }) => theme.space[5]}px;
     color: ${({ theme }) => theme.colors.textAction};

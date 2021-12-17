@@ -48,13 +48,23 @@ export const ArticleEditorPage: React.FC = () => {
         if (articleId) {
             await update();
             setMessage('Данные обновлены!');
+            setTimeout(() => setMessage(''), TIMEOUT);
         } else {
-            await saveArticle();
-            setMessage('Статья добавлена!');
-            setIsBlocked(true);
+            saveArticle().then(() => {
+                let hasErrors = false;
+
+                for (const [, v] of Object.entries(errors)) {
+                    if (v.length > 0) hasErrors = true;
+                }
+
+                if (!hasErrors) {
+                    setMessage('Статья добавлена!');
+                    setIsBlocked(true);
+                }
+                setTimeout(() => setMessage(''), TIMEOUT);
+            });
         }
-        setTimeout(() => setMessage(''), TIMEOUT);
-    }, [articleId, saveArticle, update]);
+    }, [articleId, errors, saveArticle, update]);
 
     const getErrors = useCallback((errors: string[]) => {
         return errors.map((err, i) => <Box key={i}>{err}</Box>);
