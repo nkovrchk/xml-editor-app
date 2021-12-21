@@ -35,6 +35,7 @@ export const useArticleList = () => {
     const [listOptions, setListOptions] = useRecoilState(listOptionsAtom);
     const [pagination, setPagination] = useRecoilState(paginationAtom);
     const [filteredArticles, setFilteredArticles] = useState(0);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     const resetList = useResetRecoilState(articleListAtom);
     const resetFilters = useResetRecoilState(selectedFiltersAtom);
@@ -70,6 +71,7 @@ export const useArticleList = () => {
             .then((res) => {
                 setArticleList(res.results);
                 setFilteredArticles(res.filtered);
+                setIsEmpty(res.empty);
                 setPagination({
                     currentPage: res.currentPage,
                     nextPages: res.nextPages,
@@ -99,5 +101,6 @@ export const useArticleList = () => {
         pagination,
         setPage,
         filteredArticles,
+        isEmpty,
     };
 };

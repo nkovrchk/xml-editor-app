@@ -19,6 +19,7 @@ export const ArticlesListPage: React.FC = () => {
         setPage,
         pagination: { pagesToShow, currentPage },
         filteredArticles,
+        isEmpty,
     } = useArticleList();
 
     const cardsComponent = useMemo(
@@ -39,21 +40,33 @@ export const ArticlesListPage: React.FC = () => {
 
     return (
         <ArticleListPageStyled>
-            <Filters />
-            <Box>{}</Box>
-            <Box flex="1">
-                {isPending ? (
-                    <Loader />
-                ) : (
-                    <Box>
-                        <Text variant="body1SemiBold" pl={6} mb={4}>{`Найдено статей: ${filteredArticles}`}</Text>
-                        <Grid>
-                            <GridRow>{cardsComponent}</GridRow>
-                        </Grid>
+            {isEmpty ? (
+                <Text ml={4}>Репозиторий пуст. Создайте новую статью</Text>
+            ) : (
+                <>
+                    <Filters />
+                    <Box>{}</Box>
+                    <Box flex="1">
+                        {isPending ? (
+                            <Loader />
+                        ) : (
+                            <Box>
+                                <Text
+                                    variant="body1SemiBold"
+                                    pl={6}
+                                    mb={4}
+                                >{`Найдено статей: ${filteredArticles}`}</Text>
+                                <Grid>
+                                    <GridRow>{cardsComponent}</GridRow>
+                                </Grid>
+                            </Box>
+                        )}
+                        {isPending ? null : (
+                            <Pagination pages={pagesToShow} currentPage={currentPage} handleChange={setPage} />
+                        )}
                     </Box>
-                )}
-                {isPending ? null : <Pagination pages={pagesToShow} currentPage={currentPage} handleChange={setPage} />}
-            </Box>
+                </>
+            )}
         </ArticleListPageStyled>
     );
 };

@@ -73,6 +73,8 @@ def get_articles(request):
         if base_name[1] == '.xml':
             source.append(read_xml(base_name[0]))
 
+    response['empty'] = len(source) == 0
+
     if sort_by is not None:
         source = sorted(source, key=lambda file_data: file_data[sort_by])
 
